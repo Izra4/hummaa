@@ -12,8 +12,19 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                sans: ['Poppins', ...defaultTheme.fontFamily.sans],
             },
+            colors: {
+                'ujian-blue': '#2563EB', // Biru untuk tombol dan nomor aktif
+                'ujian-green-bg': '#2C7A7B', // Background jawaban terpilih
+                'ujian-green-border': '#2C7A7B', // Border jawaban terpilih
+                'ujian-gray': {
+                    100: '#F3F4F6', // Latar belakang body
+                    200: '#E5E7EB', // Border
+                    500: '#6B7280', // Teks sekunder
+                    700: '#374151', // Teks utama
+                }
+              }
         },
     },
 

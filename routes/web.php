@@ -18,6 +18,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/tryout', function () {
+    return view('tryout.tryout-page');
+})->name('tryout');
+
+Route::get('/tryout/hasil', function () {
+    return view('tryout.tryout-completed-page');
+})->name('tryout-completed');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
