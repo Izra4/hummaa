@@ -42,7 +42,7 @@
         </div>
 
         <div class="mt-6">
-            <x-primary-button>
+            <x-primary-button class="px-4 py-3">
                 {{ __('Daftar') }}
             </x-primary-button>
         </div>
