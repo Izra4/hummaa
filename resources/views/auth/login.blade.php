@@ -30,7 +30,7 @@
 
         <div class="flex items-center justify-between mt-4">
             <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
+                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-main-bg shadow-sm focus:ring-main-bg" name="remember">
                 <span class="ms-2 text-sm text-gray-600">{{ __('Ingat Saya') }}</span>
             </label>
 
@@ -62,7 +62,7 @@
         <div class="text-center mt-6">
             <p class="text-sm text-gray-600">
                 Belum punya akun?
-                <a href="{{ route('register') }}" class="font-semibold text-gray-800 underline hover:text-blue-600">
+                <a href="{{ route('register') }}" class="font-semibold text-gray-800 underline hover:text-main-bg">
                     Daftar Sekarang
                 </a>
             </p>

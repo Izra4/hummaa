@@ -43,7 +43,6 @@
 
         <div class="mt-6">
             <x-primary-button>
-                {{-- Di desain tertulis "Masuk", tapi "Daftar" lebih sesuai konteks --}}
                 {{ __('Daftar') }}
             </x-primary-button>
         </div>
@@ -63,7 +62,7 @@
         <div class="text-center mt-6">
             <p class="text-sm text-gray-600">
                 Sudah punya akun?
-                <a href="{{ route('login') }}" class="font-semibold text-gray-800 underline hover:text-blue-600">
+                <a href="{{ route('login') }}" class="font-semibold text-gray-800 underline hover:text-main-bg">
                     Masuk Sekarang
                 </a>
             </p>
