@@ -1,20 +1,19 @@
 <header class="bg-white shadow-md relative z-10">
-    <nav class="container mx-auto flex items-center justify-between px-6 py-4">
+    {{-- Padding diubah (px-6 -> px-4 sm:px-8 lg:px-12) agar lebih lebar di layar besar --}}
+    <nav class="container mx-auto flex items-center justify-between px-4 sm:px-8 lg:px-12 py-4">
 
         <div class="flex items-center space-x-10">
             <a href="/">
-                {{-- TODO: Ganti placeholder ini dengan kode SVG logo kamu --}}
-                <svg class="h-8 w-auto text-main-bg" viewBox="0 0 24 24">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1.29 15.29c-.39.39-1.02.39-1.41 0l-3-3c-.39-.39-.39-1.02 0-1.41s1.02-.39 1.41 0L10 14.17l5.29-5.29c.39-.39 1.02-.39 1.41 0s.39 1.02 0 1.41l-6 6z"/>
-                </svg>
+                <img src="{{ asset('images/logo-biru.png') }}" alt="Logo" class="h-10 w-auto">
             </a>
 
             <ul class="hidden md:flex items-center space-x-8">
-                <li><a href="#" class="text-gray-700 hover:text-main-bg font-medium transition-colors duration-300">Beranda</a></li>
-                <li><a href="#" class="text-gray-700 hover:text-main-bg font-medium transition-colors duration-300">Materi</a></li>
-                <li><a href="#" class="text-gray-700 hover:text-main-bg font-medium transition-colors duration-300">Bank Soal</a></li>
-                <li><a href="#" class="text-gray-700 hover:text-main-bg font-medium transition-colors duration-300">Tryout</a></li>
-                <li><a href="#" class="text-gray-700 hover:text-main-bg font-medium transition-colors duration-300">Forum</a></li>
+                <li><a href="{{ route('home') }}" class="text-gray-700 hover:text-main-bg font-semibold transition-colors duration-300">Beranda</a></li>
+                <li><a href="{{ route('materials') }}" class="text-gray-700 hover:text-main-bg font-semibold transition-colors duration-300">Materi</a></li>
+                <li><a href="{{ route('question-bank') }}" class="text-gray-700 hover:text-main-bg font-semibold transition-colors duration-300">Bank Soal</a></li>
+                <li><a href="{{ route('tryouts') }}" class="text-gray-700 hover:text-main-bg font-semibold transition-colors duration-300">Tryout</a></li>
+                <li><a href="{{ route('forum') }}" class="text-gray-700 hover:text-main-bg font-semibold transition-colors duration-300">Forum</a></li>
+            </ul>
             </ul>
         </div>
 

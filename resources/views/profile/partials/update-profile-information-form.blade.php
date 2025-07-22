@@ -14,8 +14,8 @@
                 <x-input-label for="photo">
                     Foto Profil <span class="text-red-500">*</span>
                 </x-input-label>
-                <div class="mt-2 flex items-center space-x-6">
-                    <img id="photo-preview" class="h-24 w-24 rounded-full object-cover" src="" alt="Foto Profil">
+                <div class="mt-2 flex flex-col items-center space-y-4 md:flex-row md:space-y-0 md:space-x-3">
+                    <img id="photo-preview" class="h-24 w-24 rounded-full border border-main-bg object-cover" src="" alt="Foto Profil">
                     <div>
                         <x-primary-button px="px-2" py="py-2" rounded="rounded-xl" uc="" tracking=""
                                           type="button" onclick="document.getElementById('photo').click();">
@@ -23,7 +23,7 @@
                         </x-primary-button>
                         <input type="file" id="photo" name="photo" class="hidden" onchange="previewImage(event)">
                     </div>
-                    <button class="text-main-blue-button rounded-lg px-2 py-2 hover:bg-gray-50 transition ease-in-out duration-150
+                    <button class="text-main-blue-button border border-main-blue-button text-sm rounded-lg px-2 py-2 hover:bg-gray-50 transition ease-in-out duration-150
                     font-semibold">
                         Gunakan Karakter Avatar
                     </button>
@@ -75,11 +75,11 @@
                     <x-input-label :value="__('Jenis Kelamin')" />
                     <div class="flex items-center space-x-6 mt-2">
                         <label for="male" class="flex items-center">
-                            <input id="male" name="gender" type="radio" value="Laki-Laki" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                            <input id="male" name="gender" type="radio" value="Laki-Laki" class="h-4 w-4 text-main-blue-button border-gray-300 focus:ring-main-blue-button">
                             <span class="ms-2 text-sm text-gray-700">Laki-Laki</span>
                         </label>
                         <label for="female" class="flex items-center">
-                            <input id="female" name="gender" type="radio" value="Perempuan" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                            <input id="female" name="gender" type="radio" value="Perempuan" class="h-4 w-4 text-main-blue-button border-gray-300 focus:ring-main-blue-button">
                             <span class="ms-2 text-sm text-gray-700">Perempuan</span>
                         </label>
                     </div>
@@ -107,3 +107,16 @@
         </form>
     </div>
 </section>
+
+<script>
+    function previewImage(event) {
+        var reader = new FileReader();
+
+        reader.onload = function(){
+            var output = document.getElementById('photo-preview');
+            output.src = reader.result;
+        };
+
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>

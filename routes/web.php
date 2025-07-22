@@ -36,5 +36,25 @@ Route::middleware('auth')->group(function () {
 });
 Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
 
+Route::get('/', function () {
+    return view('home.welcome');
+})->name('home');
+
+Route::get('/materi', function () {
+    return view('pages.materials');
+})->name('materials');
+
+Route::get('/bank-soal', function () {
+    return view('pages.question-bank');
+})->name('question-bank');
+
+Route::get('/tryout', function () {
+    return view('pages.tryouts');
+})->name('tryouts');
+
+Route::get('/forum', function () {
+    return view('pages.forum');
+})->name('forum');
+
 
 require __DIR__.'/auth.php';
