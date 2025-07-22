@@ -49,7 +49,7 @@ Route::get('/bank-soal', function () {
 })->name('question-bank');
 
 Route::get('/tryout', function () {
-    return view('pages.tryouts');
+    return view('tryout.tryout-landing-page');
 })->name('tryouts');
 
 Route::get('/forum', function () {

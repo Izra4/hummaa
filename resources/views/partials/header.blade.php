@@ -1,19 +1,42 @@
 <header class="bg-white shadow-md relative z-10">
-    {{-- Padding diubah (px-6 -> px-4 sm:px-8 lg:px-12) agar lebih lebar di layar besar --}}
     <nav class="container mx-auto flex items-center justify-between px-4 sm:px-8 lg:px-12 py-4">
 
         <div class="flex items-center space-x-10">
-            <a href="/">
+            <a href="{{ route('home') }}">
                 <img src="{{ asset('images/logo-biru.png') }}" alt="Logo" class="h-10 w-auto">
             </a>
 
             <ul class="hidden md:flex items-center space-x-8">
-                <li><a href="{{ route('home') }}" class="text-gray-700 hover:text-main-bg font-semibold transition-colors duration-300">Beranda</a></li>
-                <li><a href="{{ route('materials') }}" class="text-gray-700 hover:text-main-bg font-semibold transition-colors duration-300">Materi</a></li>
-                <li><a href="{{ route('question-bank') }}" class="text-gray-700 hover:text-main-bg font-semibold transition-colors duration-300">Bank Soal</a></li>
-                <li><a href="{{ route('tryouts') }}" class="text-gray-700 hover:text-main-bg font-semibold transition-colors duration-300">Tryout</a></li>
-                <li><a href="{{ route('forum') }}" class="text-gray-700 hover:text-main-bg font-semibold transition-colors duration-300">Forum</a></li>
-            </ul>
+                <li>
+                    <a href="{{ route('home') }}" class="font-semibold transition-colors duration-300 rounded-lg px-4 py-2
+                        {{ request()->routeIs('home') ? 'bg-main-bg text-white' : 'text-gray-700 hover:text-main-bg' }}">
+                        Beranda
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('materials') }}" class="font-semibold transition-colors duration-300 rounded-lg px-4 py-2
+                        {{ request()->routeIs('materials*') ? 'bg-main-bg text-white' : 'text-gray-700 hover:text-main-bg' }}">
+                        Materi
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('question-bank') }}" class="font-semibold transition-colors duration-300 rounded-lg px-4 py-2
+                        {{ request()->routeIs('question-bank*') ? 'bg-main-bg text-white' : 'text-gray-700 hover:text-main-bg' }}">
+                        Bank Soal
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('tryouts') }}" class="font-semibold transition-colors duration-300 rounded-lg px-4 py-2
+                        {{ request()->routeIs('tryouts*') ? 'bg-main-bg text-white' : 'text-gray-700 hover:text-main-bg' }}">
+                        Tryout
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('forum') }}" class="font-semibold transition-colors duration-300 rounded-lg px-4 py-2
+                        {{ request()->routeIs('forum*') ? 'bg-main-bg text-white' : 'text-gray-700 hover:text-main-bg' }}">
+                        Forum
+                    </a>
+                </li>
             </ul>
         </div>
 
