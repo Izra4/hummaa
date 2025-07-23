@@ -20,8 +20,8 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('question-bank') }}" class="font-semibold transition-colors duration-300 rounded-lg px-4 py-2
-                        {{ request()->routeIs('question-bank*') ? 'bg-main-bg text-white' : 'text-gray-700 hover:text-main-bg' }}">
+                    <a href="{{ route('bank-soal') }}" class="font-semibold transition-colors duration-300 rounded-lg px-4 py-2
+                        {{ request()->routeIs('bank-soal*') ? 'bg-main-bg text-white' : 'text-gray-700 hover:text-main-bg' }}">
                         Bank Soal
                     </a>
                 </li>
