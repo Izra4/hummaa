@@ -10,7 +10,7 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="font-poppins antialiased flex flex-col min-h-screen bg-gray-50">
+<body class="font-poppins antialiased flex flex-col min-h-screen bg-white">
 
     @include('partials.header')
 

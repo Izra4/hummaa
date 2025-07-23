@@ -14,17 +14,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
-Route::get('/tryout', function () {
+Route::get('/tryout/details', function () {
     return view('tryout.tryout-page');
-})->name('tryout');
+})->name('tryout-detail');
 
 Route::get('/tryout/hasil', function () {
     return view('tryout.tryout-completed-page');
 })->name('tryout-completed');
+
+Route::get('/bank-soal', function () {
+    return view('pages.bank-soal-page');
+})->name('bank-soal');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -41,12 +45,9 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/materi', function () {
-    return view('pages.materials');
+    return view('pages.materials-page');
 })->name('materials');
 
-Route::get('/bank-soal', function () {
-    return view('pages.question-bank');
-})->name('question-bank');
 
 Route::get('/tryout', function () {
     return view('tryout.tryout-landing-page');

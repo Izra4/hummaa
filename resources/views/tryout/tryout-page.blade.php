@@ -3,24 +3,24 @@
 @section('content')
     <div x-data="ujianState()">
         <div class="flex flex-col lg:flex-row gap-6 lg:items-start">
-            {{-- KOLOM KIRI: Navigasi Soal --}}
             <div class="w-full lg:w-1/3">
-                <x-grid-question-number />
+                <x-tryout.grid-question-number 
+                :title="'Tes Potensi Akademik'"
+                :imageUrl="asset('images/tpa-logo.png')" />
+                    
             </div>
 
-            {{-- KOLOM KANAN: Konten Pertanyaan --}}
             <div class="w-full lg:w-2/3">
-                <x-question-card />
+                <x-tryout.question-card />
             </div>
 
         </div>
-        <x-confirm-submit-modal />
+        <x-tryout.confirm-submit-modal />
     </div>
 
     <script>
         function ujianState() {
             return {
-                // DATA: Mock data soal (di aplikasi nyata, ini datang dari controller Laravel)
                 questions: [{
                         id: 1,
                         text: 'Pertanyaan pertama tentang logika verbal.',
