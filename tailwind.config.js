@@ -19,6 +19,7 @@ export default {
                 'ujian-green-bg': '#2C7A7B', // Background jawaban terpilih
                 'main-bg': '#2C7A7B', // Main background
                 'card-diff-bg': '#bbd4d5',
+                'sidebar-active': '#d5e4e5',
                 'main-blue-button': '#1976d2', // Main Button
                 'ujian-green-border': '#2C7A7B', // Border jawaban terpilih
                 'ujian-gray': {

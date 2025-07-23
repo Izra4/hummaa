@@ -53,7 +53,7 @@ Route::get('/tryout', function () {
 })->name('tryouts');
 
 Route::get('/forum', function () {
-    return view('pages.forum');
+    return view('forum.page');
 })->name('forum');
 
 
