@@ -59,4 +59,11 @@
             Lanjut
         </button>
     </div>
+
+    <template x-if="mode === 'belajar'">
+        <div class="mt-8 rounded-lg border border-gray-200 p-4">
+            <h3 class="font-bold text-gray-800">Pembahasan</h3>
+            <p class="mt-2 text-gray-600" x-text="currentQuestion.explanation"></p>
+        </div>
+    </template>
 </div>

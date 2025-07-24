@@ -61,7 +61,8 @@
                         </x-slot:icon>
 
                         <x-bank-soal.bs-question-card judul="PPPK 2022 Aljabar" jumlahSoal="100"
-                            tryout-url="{{ route('tryout-detail') }}" />
+                            tryout-url="{{ route('tryout-detail', ['mode' => 'tryout']) }}"
+                            belajar-url="{{ route('tryout-detail', ['mode' => 'belajar']) }}" />
                         <x-bank-soal.bs-question-card judul="PPPK 2022 Silogisme" jumlahSoal="80" />
                         <x-bank-soal.bs-question-card judul="PPPK 2022 Analogi Verbal" jumlahSoal="120" />
                         <x-bank-soal.bs-question-card judul="PPPK 2022 Deret Angka" jumlahSoal="100" />
