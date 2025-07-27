@@ -1,16 +1,37 @@
-<div @click="selectAnswer(key)"
-    class="flex cursor-pointer items-center gap-4 rounded-lg border p-2 transition-colors duration-200"
+<div
+    @click="mode === 'tryout' ? selectAnswer(key) : null"
+    class="flex items-center justify-between gap-4 rounded-lg border  p-2 transition-colors"
     :class="{
-        'bg-main-bg/50 border border-main-bg text-white': answers[currentQuestion.id] ===
-            key,
-        'bg-white border border-gray-200 hover:border-main-bg': answers[currentQuestion.id] !== key
-    }">
-    <div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md text-sm font-bold"
+        'cursor-pointer hover:border-main-bg': mode === 'tryout',
+        'cursor-default': mode === 'belajar',
+
+        'bg-main-bg/40 border-main-bg text-white': mode === 'belajar' && currentQuestion.correctAnswer === key,
+
+        'bg-red-300 border-red-500 text-white': mode === 'belajar' && answers[currentQuestion.id] === key && currentQuestion.correctAnswer !== key,
+
+        'bg-main-bg/50 border-main-bg text-white': mode === 'tryout' && answers[currentQuestion.id] === key
+    }"
+>
+    <div class="flex items-center gap-4">
+        <div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md text-sm font-bold bg-white border border-ujian-gray-200 text-black"
         :class="{
-            'bg-main-bg text-white': answers[currentQuestion.id] === key,
-            'border border-gray-200 bg-white text-black': answers[currentQuestion.id] !== key
+            '!border-red-600 !bg-red-600 text-white': mode === 'belajar' && answers[currentQuestion.id] === key && currentQuestion.correctAnswer !== key,
+            '!border-main-bg !bg-main-bg text-white': mode === 'belajar' && currentQuestion.correctAnswer === key,
+            '!border-main-bg/90 !bg-main-bg/90 text-white': mode === 'tryout' && answers[currentQuestion.id] === key
         }">
-        <span x-text="key"></span>
+            <span x-text="key"></span>
+        </div>
+        <p class="text-sm font-normal" x-text="text"></p>
     </div>
-    <p class="text-sm" x-text="text"></p>
+
+    <template x-if="mode === 'belajar'">
+        <div>
+            <svg x-show="currentQuestion.correctAnswer === key" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-main-bg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <svg x-show="answers[currentQuestion.id] === key && currentQuestion.correctAnswer !== key" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+        </div>
+    </template>
 </div>

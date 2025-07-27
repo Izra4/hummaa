@@ -20,12 +20,18 @@
 
     <script>
         function ujianState() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const pageMode = urlParams.get('mode') || 'tryout';
             return {
+                mode: pageMode,
+
                 questions: [{
                         id: 1,
                         text: 'Pertanyaan pertama tentang logika verbal.',
                         type: 'pilihan_ganda',
-                        image: null
+                        image: null,
+                        correctAnswer: 'B',
+                        explanation: 'Dalam menghadapi tugas baru, inisiatif untuk belajar dan mencari informasi adalah sikap proaktif yang paling dihargai, menunjukkan kemauan untuk berkembang.'
                     },
                     {
                         id: 2,
@@ -37,7 +43,9 @@
                         id: 3,
                         text: 'Ketika Anda diberikan tugas baru yang belum pernah Anda kerjakan sebelumnya, apa yang biasanya Anda lakukan?',
                         type: 'pilihan_ganda',
-                        image: '{{ asset("images/contoh-soal-gambar.jpg") }}'
+                        image: '{{ asset("images/contoh-soal-gambar.jpg") }}',
+                        correctAnswer: 'B',
+                        explanation: 'Dalam menghadapi tugas baru, inisiatif untuk belajar dan mencari informasi adalah sikap proaktif yang paling dihargai, menunjukkan kemauan untuk berkembang.'
                     },
                     // ... tambahkan 47 soal lainnya
                 ],
@@ -50,10 +58,12 @@
                 },
 
                 // STATE
-                currentIndex: 2, // Indeks soal yg aktif (dimulai dari 0)
+
+                currentIndex: 2,
                 answers: {
-                    1: 'C',
-                    2: 'Dina anggota PSHT'
+                    1: 'B',
+                    2: 'Dina anggota PSHT',
+                    3: 'E'
                 }, // Jawaban yg sudah tersimpan
                 timeLeft: 3600, // Sisa waktu dalam detik
                 isModalOpen: false,
@@ -102,6 +112,11 @@
                     const minutes = Math.floor((this.timeLeft % 3600) / 60).toString().padStart(2, '0');
                     const seconds = (this.timeLeft % 60).toString().padStart(2, '0');
                     return `${hours}:${minutes}:${seconds}`;
+                },
+
+                toggleMode() {
+                    this.mode = (this.mode === 'tryout') ? 'belajar' : 'tryout';
+                    console.log('Mode diubah menjadi:', this.mode)
                 },
 
                 submitExam() {
