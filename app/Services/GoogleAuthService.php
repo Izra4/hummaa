@@ -5,11 +5,10 @@ namespace App\Services;
 use App\Models\User;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use Laravel\Socialite\Facades\Socialite;
-use Laravel\Socialite\Two\User as SocialiteUser;
+use Laravel\Socialite\Contracts\User as SocialiteUser; 
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Exception;
-
 class GoogleAuthService
 {
     protected UserRepositoryInterface $userRepository;

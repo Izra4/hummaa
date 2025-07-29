@@ -48,4 +48,5 @@ class GoogleAuthController extends Controller
                 ->with('error', 'Autentikasi Google gagal: ' . $e->getMessage());
         }
     }
+    
 }

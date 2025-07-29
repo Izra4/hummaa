@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\GoogleAuthController;
+use App\Http\Controllers\MateriController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -60,47 +61,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('bank-soal.bank-soal-page');
     })->name('bank-soal');
     
-    // Materials Routes
-    Route::get('/materi', function () {
-        $allMateri = [
-            [
-                'id' => 1,
-                'title' => 'Kompetensi Wawancara',
-                'description' => 'Kumpulan soal dan jawaban wawancara untuk menguji integritas dan motivasi.',
-                'status' => 'Progres',
-                'duration' => '45 menit',
-                'fileSize' => 'PDF 31 KB',
-                'progress' => 50,
-                'file_path' => 'materials/materi-wawancara.pdf'
-            ],
-            [
-                'id' => 2,
-                'title' => 'Kompetensi Sosio-Kultural',
-                'description' => 'Bank soal pilihan ganda untuk mengukur kemampuan adaptasi dan interaksi sosial.',
-                'status' => 'Selesai',
-                'duration' => '90 menit',
-                'fileSize' => 'PDF 145 KB',
-                'progress' => 100,
-                'file_path' => 'materials/materi-kompetensi-sosio-kultural.pdf'
-            ],
-            [
-                'id' => 3,
-                'title' => 'Kompetensi Manajerial',
-                'description' => 'Materi konseptual tentang 8 aspek kompetensi manajerial, POAC, dan SWOT.',
-                'status' => 'Progres',
-                'duration' => '120 menit',
-                'fileSize' => 'PDF 1.2 MB',
-                'progress' => 25,
-                'file_path' => 'materials/materi-manajerial.pdf'
-            ]
-        ];
-
-        return view('material.materials-page', ['allMateri' => $allMateri]);
-    })->name('materials');
-    
-    Route::get('/materi/{id}', function ($id) {
-        return view('materi-detail', ['id' => $id]);
-    })->name('materi.show')->where('id', '[0-9]+');
+    // Materials Routes - Updated to use controller
+    Route::prefix('materi')->group(function () {
+        Route::get('/', [MateriController::class, 'index'])->name('materials'); // Keep the old name
+        Route::get('/create', [MateriController::class, 'create'])->name('materi.create');
+        Route::post('/', [MateriController::class, 'store'])->name('materi.store');
+        Route::get('/{materi}', [MateriController::class, 'show'])->name('materi.show');
+        Route::get('/{materi}/edit', [MateriController::class, 'edit'])->name('materi.edit');
+        Route::put('/{materi}', [MateriController::class, 'update'])->name('materi.update');
+        Route::delete('/{materi}', [MateriController::class, 'destroy'])->name('materi.destroy');
+        Route::get('/{materi}/download', [MateriController::class, 'download'])->name('materi.download');
+        Route::patch('/{materi}/progress', [MateriController::class, 'updateProgress'])->name('materi.progress.update');
+    });
     
     // Forum
     Route::get('/forum', function () {
