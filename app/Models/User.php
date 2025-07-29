@@ -21,6 +21,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'provider',
+        'provider_id',
+        'avatar',
+        'email_verified_at',
     ];
 
     /**
@@ -42,4 +46,20 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    /**
+     * Check if user registered via social provider
+     */
+    public function isSocialUser(): bool
+    {
+        return !is_null($this->provider);
+    }
+
+    /**
+     * Check if user registered via Google
+     */
+    public function isGoogleUser(): bool
+    {
+        return $this->provider === 'google';
+    }
 }

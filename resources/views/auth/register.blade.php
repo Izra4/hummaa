@@ -3,6 +3,19 @@
         Daftar Akun Anda!
     </h1>
 
+    {{-- Success/Error Messages --}}
+    @if (session('success'))
+        <div class="mb-4 p-4 bg-green-100 border border-green-300 text-green-700 rounded-md">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="mb-4 p-4 bg-red-100 border border-red-300 text-red-700 rounded-md">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
@@ -42,7 +55,7 @@
         </div>
 
         <div class="mt-6">
-            <x-primary-button class="px-4 py-3">
+            <x-primary-button class="w-full px-4 py-3 justify-center">
                 {{ __('Daftar') }}
             </x-primary-button>
         </div>
@@ -54,7 +67,7 @@
         </div>
 
         <div>
-            <x-google-button href="#"> {{-- <-- Ganti href ke route Google Auth --}}
+            <x-google-button href="{{ route('auth.google') }}">
                 {{ __('Daftar dengan Google') }}
             </x-google-button>
         </div>
