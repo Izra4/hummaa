@@ -16,8 +16,52 @@ class ProfileUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'whatsapp' => ['required', 'string', 'max:20'],
+            'birth_date' => ['nullable', 'date', 'before:today'],
+            'gender' => ['nullable', 'in:Laki-Laki,Perempuan'],
+            'photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'], // 2MB max
+            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
+        ];
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function attributes(): array
+    {
+        return [
+            'first_name' => 'nama depan',
+            'last_name' => 'nama belakang',
+            'whatsapp' => 'nomor WhatsApp',
+            'birth_date' => 'tanggal lahir',
+            'gender' => 'jenis kelamin',
+            'photo' => 'foto profil',
+            'password' => 'password',
+        ];
+    }
+
+    /**
+     * Get custom messages for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'first_name.required' => 'Nama depan wajib diisi.',
+            'last_name.required' => 'Nama belakang wajib diisi.',
+            'whatsapp.required' => 'Nomor WhatsApp wajib diisi.',
+            'photo.image' => 'File harus berupa gambar.',
+            'photo.mimes' => 'Format foto harus jpeg, png, jpg, atau gif.',
+            'photo.max' => 'Ukuran foto maksimal 2MB.',
+            'password.min' => 'Password minimal 8 karakter.',
+            'password.confirmed' => 'Konfirmasi password tidak cocok.',
+            'birth_date.before' => 'Tanggal lahir harus sebelum hari ini.',
+            'gender.in' => 'Jenis kelamin tidak valid.',
         ];
     }
 }
