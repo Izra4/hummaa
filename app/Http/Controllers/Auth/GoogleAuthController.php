@@ -37,16 +37,16 @@ class GoogleAuthController extends Controller
     {
         try {
             $user = $this->googleAuthService->handleGoogleCallback();
-            
+
             Auth::login($user, true);
-            
-            return redirect()->intended(route('dashboard'))
+
+            return redirect()->intended(route('materi'))
                 ->with('success', 'Berhasil masuk dengan akun Google!');
-                
+
         } catch (Exception $e) {
             return redirect()->route('register')
                 ->with('error', 'Autentikasi Google gagal: ' . $e->getMessage());
         }
     }
-    
+
 }

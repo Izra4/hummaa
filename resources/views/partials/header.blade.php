@@ -40,14 +40,52 @@
             </ul>
         </div>
 
-        <div class="hidden md:flex items-center space-x-4">
-            <a href="{{ route('login') }}" class="px-6 py-2 text-sm font-semibold text-main-bg border border-main-bg rounded-full hover:bg-teal-50 transition-colors duration-300">
-                Log in
-            </a>
-            <a href="{{ route('register') }}" class="px-6 py-2 text-sm font-semibold text-white bg-main-bg rounded-full hover:bg-teal-700 transition-colors duration-300">
-                Sign in
-            </a>
-        </div>
+        @guest
+            {{-- Tampilkan ini jika user BELUM LOGIN --}}
+            <div class="hidden md:flex items-center space-x-4">
+                <a href="{{ route('login') }}" class="px-6 py-2 text-sm font-semibold text-main-bg border border-main-bg rounded-full hover:bg-teal-50 transition-colors duration-300">
+                    Log in
+                </a>
+                <a href="{{ route('register') }}" class="px-6 py-2 text-sm font-semibold text-white bg-main-bg rounded-full hover:bg-teal-700 transition-colors duration-300">
+                    Sign Up
+                </a>
+            </div>
+        @endguest
+
+        @auth
+            <div class="hidden md:flex items-center space-x-4">
+                <div x-data="{ open: false }" class="relative">
+                    <button @click="open = !open" class="flex items-center space-x-2 focus:outline-none">
+                        <img class="h-10 w-10 rounded-full object-cover border-2 border-gray-300"
+                             src="{{ Auth::user()->photo ? asset('storage/' . Auth::user()->photo) : asset('images/default-avatar.png') }}"
+                             alt="{{ Auth::user()->name }}">
+                    </button>
+
+                    <div x-show="open"
+                         @click.away="open = false"
+                         x-transition
+                         class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-20"
+                         style="display: none;">
+
+                        <div class="px-4 py-2 text-sm text-gray-700">
+                            <p class="font-semibold">{{ Auth::user()->name }}</p>
+                            <p class="text-xs text-gray-500 truncate">{{ Auth::user()->email }}</p>
+                        </div>
+
+                        <hr>
+
+                        <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profil Saya</a>
+
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                Logout
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        @endauth
 
         <div class="md:hidden">
             <button class="text-gray-700 hover:text-gray-900 focus:outline-none">

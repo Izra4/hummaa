@@ -15,7 +15,8 @@
                     Foto Profil <span class="text-red-500">*</span>
                 </x-input-label>
                 <div class="mt-2 flex flex-col items-center space-y-4 md:flex-row md:space-y-0 md:space-x-3">
-                    <img id="photo-preview" class="h-24 w-24 rounded-full border border-main-bg object-cover" src="" alt="Foto Profil">
+                    <img id="photo-preview" class="h-24 w-24 rounded-full border border-main-bg object-cover"
+                         src="{{ Auth::user()->profile_picture_url }}" alt="{{ Auth::user()->full_name }}">
                     <div>
                         <x-primary-button px="px-2" py="py-2" rounded="rounded-xl" uc="" tracking=""
                                           type="button" onclick="document.getElementById('photo').click();">
@@ -37,14 +38,16 @@
                     <x-input-label for="first_name">
                         Nama Depan <span class="text-red-500">*</span>
                     </x-input-label>
-                    <x-text-input id="first_name" name="first_name" type="text" class="mt-1 block w-full" value="Joko" required autofocus />
+                    <x-text-input id="first_name" name="first_name" type="text" class="mt-1 block w-full"
+                                  value="{{ old('first_name', Auth::user()->nama_depan) }}" required autofocus />
                     <x-input-error class="mt-2" :messages="$errors->get('first_name')" />
                 </div>
                 <div>
                     <x-input-label for="last_name">
                     Nama Belakang <span class="text-red-500">*</span>
                     </x-input-label>
-                    <x-text-input id="last_name" name="last_name" type="text" class="mt-1 block w-full" value="Widodo" required />
+                    <x-text-input id="last_name" name="last_name" type="text" class="mt-1 block w-full"
+                                  value="{{ old('last_name', Auth::user()->nama_belakang) }}" required />
                     <x-input-error class="mt-2" :messages="$errors->get('last_name')" />
                 </div>
             </div>
@@ -53,7 +56,8 @@
                 <x-input-label for="email">
                     Alamat Email <span class="text-red-500">*</span>
                 </x-input-label>
-                <x-text-input id="email" name="email" type="email" class="mt-1 block w-full bg-gray-100" value="hidupjokowi@um.ac.id" required autocomplete="username" disabled />
+                <x-text-input id="email" name="email" type="email" class="mt-1 block w-full bg-gray-100"
+                              value="{{ Auth::user()->email }}" required disabled />
                 <x-input-error class="mt-2" :messages="$errors->get('email')" />
             </div>
 
@@ -61,25 +65,31 @@
                 <x-input-label for="whatsapp">
                     No WhatsApp <span class="text-red-500">*</span>
                 </x-input-label>
-                <x-text-input id="whatsapp" name="whatsapp" type="text" class="mt-1 block w-full" value="old('whatsapp', $user->whatsapp)" />
+                <x-text-input id="whatsapp" name="whatsapp" type="text" class="mt-1 block w-full"
+                              value="{{ old('whatsapp', Auth::user()->no_whatsapp) }}" />
                 <x-input-error class="mt-2" :messages="$errors->get('whatsapp')" />
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <x-input-label for="birth_date" :value="__('Tanggal Lahir')"></x-input-label>
-                    <x-text-input id="birth_date" name="birth_date" type="date" class="mt-1 block w-full" value="old('birth_date', $user->birth_date)" />
+                    <x-text-input id="birth_date" name="birth_date" type="date" class="mt-1 block w-full"
+                                  value="{{ old('birth_date', Auth::user()->tanggal_lahir?->format('Y-m-d')) }}" />
                     <x-input-error class="mt-2" :messages="$errors->get('birth_date')" />
                 </div>
                 <div>
                     <x-input-label :value="__('Jenis Kelamin')" />
                     <div class="flex items-center space-x-6 mt-2">
                         <label for="male" class="flex items-center">
-                            <input id="male" name="gender" type="radio" value="Laki-Laki" class="h-4 w-4 text-main-blue-button border-gray-300 focus:ring-main-blue-button">
+                            <input id="male" name="gender" type="radio" value="Laki-Laki"
+                                   @if(old('gender', Auth::user()->jenis_kelamin) == 'Laki-Laki') checked @endif
+                                   class="h-4 w-4 text-main-blue-button border-gray-300 focus:ring-main-blue-button">
                             <span class="ms-2 text-sm text-gray-700">Laki-Laki</span>
                         </label>
                         <label for="female" class="flex items-center">
-                            <input id="female" name="gender" type="radio" value="Perempuan" class="h-4 w-4 text-main-blue-button border-gray-300 focus:ring-main-blue-button">
+                            <input id="female" name="gender" type="radio" value="Perempuan"
+                                   @if(old('gender', Auth::user()->jenis_kelamin) == 'Perempuan') checked @endif
+                                   class="h-4 w-4 text-main-blue-button border-gray-300 focus:ring-main-blue-button">
                             <span class="ms-2 text-sm text-gray-700">Perempuan</span>
                         </label>
                     </div>
@@ -88,23 +98,26 @@
 
             <div>
                 <x-input-label for="password" :value="__('Ganti Password')" />
-                <x-text-input id="password" name="password" type="password" class="mt-1 block w-full"/>
+                <x-text-input id="password" name="password" type="password" class="mt-1 block w-full" autocomplete="new-password" />
                 <x-input-error class="mt-2" :messages="$errors->get('password')" />
             </div>
 
             <div>
-                <x-input-label for="password" :value="__('Konfirmasi Password')" />
-                <x-text-input id="password" name="password" type="password" class="mt-1 block w-full"/>
-                <x-input-error class="mt-2" :messages="$errors->get('password')" />
-            </div>
-
-            <div class="flex items-center justify-end gap-4 mt-8">
-                <x-buttons.danger-button :href="route('logout')">
-                    {{ __('Logout') }}
-                </x-buttons.danger-button>
-                <x-primary-button px="px-6" py="py-2" width="" uc="" tracking="">{{ __('Simpan') }}</x-primary-button>
+                <x-input-label for="password_confirmation" :value="__('Konfirmasi Password')" />
+                <x-text-input id="password_confirmation" name="password_confirmation" type="password" class="mt-1 block w-full" autocomplete="new-password" />
+                <x-input-error class="mt-2" :messages="$errors->get('password_confirmation')" />
             </div>
         </form>
+
+            <div class="flex items-center justify-end gap-4 mt-8">
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <x-buttons.danger-button type="submit">
+                        {{ __('Logout') }}
+                    </x-buttons.danger-button>
+                </form>
+                <x-primary-button px="px-6" py="py-2" width="" uc="" tracking="">{{ __('Simpan') }}</x-primary-button>
+            </div>
     </div>
 </section>
 

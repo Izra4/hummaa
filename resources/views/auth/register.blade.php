@@ -3,7 +3,6 @@
         Daftar Akun Anda!
     </h1>
 
-    {{-- Success/Error Messages --}}
     @if (session('success'))
         <div class="mb-4 p-4 bg-green-100 border border-green-300 text-green-700 rounded-md">
             {{ session('success') }}

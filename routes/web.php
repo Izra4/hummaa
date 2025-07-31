@@ -33,34 +33,34 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
-    
+
     // Profile Management
     Route::prefix('profile')->name('profile.')->group(function () {
         Route::get('/', [ProfileController::class, 'edit'])->name('edit');
         Route::patch('/', [ProfileController::class, 'update'])->name('update');
         Route::delete('/', [ProfileController::class, 'destroy'])->name('destroy');
     });
-    
+
     // Tryout Routes
     Route::prefix('tryout')->group(function () {
         Route::get('/', function () {
             return view('tryout.tryout-landing-page');
         })->name('tryouts');
-        
+
         Route::get('/details', function () {
             return view('tryout.tryout-page');
         })->name('tryout-detail');
-        
+
         Route::get('/hasil', function () {
             return view('tryout.tryout-completed-page');
         })->name('tryout-completed');
     });
-    
+
     // Bank Soal
     Route::get('/bank-soal', function () {
         return view('bank-soal.bank-soal-page');
     })->name('bank-soal');
-    
+
     // Materials Routes - Updated to use controller
     Route::prefix('materi')->group(function () {
         Route::get('/', [MateriController::class, 'index'])->name('materials'); // Keep the old name
@@ -73,7 +73,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/{materi}/download', [MateriController::class, 'download'])->name('materi.download');
         Route::patch('/{materi}/progress', [MateriController::class, 'updateProgress'])->name('materi.progress.update');
     });
-    
+
     // Forum
     Route::get('/forum', function () {
         return view('forum.page');
