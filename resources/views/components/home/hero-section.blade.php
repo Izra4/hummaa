@@ -15,12 +15,24 @@
                 PPPKin hadir sebagai solusi belajar modern untuk kamu yang sedang berjuang menjadi ASN. Mulai dari materi lengkap, latihan soal, tryout online, sampai forum diskusi interaktif.
             </p>
             <div class="mt-10">
-                <a href="{{ route('register') }}"
-                   class="inline-block rounded-md bg-main-bg px-4 py-2 text-base font-semibold text-white shadow-sm
-                   hover:bg-teal-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
-                   focus-visible:outline-teal-600 transition-colors duration-300">
-                    Daftar Sekarang
-                </a>
+                @guest
+                    <a href="{{ route('register') }}"
+                       class="inline-block rounded-md bg-main-bg px-4 py-2 text-base font-semibold text-white shadow-sm
+                       hover:bg-teal-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
+                       focus-visible:outline-teal-600 transition-colors duration-300">
+                        Daftar Sekarang
+                    </a>
+                @endguest
+
+                @auth
+                        <a href="{{ route('materials') }}"
+                           class="inline-block rounded-md bg-main-bg px-4 py-2 text-base font-semibold text-white shadow-sm
+                           hover:bg-teal-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
+                           focus-visible:outline-teal-600 transition-colors duration-300">
+                            Belajar Sekarang
+                        </a>
+                @endauth
+
             </div>
         </div>
     </div>

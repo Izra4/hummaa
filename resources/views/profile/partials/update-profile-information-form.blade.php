@@ -88,23 +88,26 @@
 
             <div>
                 <x-input-label for="password" :value="__('Ganti Password')" />
-                <x-text-input id="password" name="password" type="password" class="mt-1 block w-full"/>
+                <x-text-input id="password" name="password" type="password" class="mt-1 block w-full" autocomplete="new-password" />
                 <x-input-error class="mt-2" :messages="$errors->get('password')" />
             </div>
 
             <div>
-                <x-input-label for="password" :value="__('Konfirmasi Password')" />
-                <x-text-input id="password" name="password" type="password" class="mt-1 block w-full"/>
-                <x-input-error class="mt-2" :messages="$errors->get('password')" />
-            </div>
-
-            <div class="flex items-center justify-end gap-4 mt-8">
-                <x-buttons.danger-button :href="route('logout')">
-                    {{ __('Logout') }}
-                </x-buttons.danger-button>
-                <x-primary-button px="px-6" py="py-2" width="" uc="" tracking="">{{ __('Simpan') }}</x-primary-button>
+                <x-input-label for="password_confirmation" :value="__('Konfirmasi Password')" />
+                <x-text-input id="password_confirmation" name="password_confirmation" type="password" class="mt-1 block w-full" autocomplete="new-password" />
+                <x-input-error class="mt-2" :messages="$errors->get('password_confirmation')" />
             </div>
         </form>
+
+            <div class="flex items-center justify-end gap-4 mt-8">
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <x-buttons.danger-button type="submit">
+                        {{ __('Logout') }}
+                    </x-buttons.danger-button>
+                </form>
+                <x-primary-button px="px-6" py="py-2" width="" uc="" tracking="">{{ __('Simpan') }}</x-primary-button>
+            </div>
     </div>
 </section>
 
