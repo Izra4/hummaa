@@ -47,7 +47,7 @@
                     Log in
                 </a>
                 <a href="{{ route('register') }}" class="px-6 py-2 text-sm font-semibold text-white bg-main-bg rounded-full hover:bg-teal-700 transition-colors duration-300">
-                    Sign in
+                    Sign Up
                 </a>
             </div>
         @endguest
