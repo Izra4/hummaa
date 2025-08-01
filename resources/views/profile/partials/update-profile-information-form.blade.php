@@ -107,17 +107,32 @@
                 <x-text-input id="password_confirmation" name="password_confirmation" type="password" class="mt-1 block w-full" autocomplete="new-password" />
                 <x-input-error class="mt-2" :messages="$errors->get('password_confirmation')" />
             </div>
+         <!-- Success Message -->
+            @if (session('status') === 'profile-updated')
+                <div class="mt-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
+                    Profil berhasil diperbarui!
+                </div>
+            @endif
+
+            <!-- Action Buttons - PINDAH KE DALAM FORM -->
+            <div class="flex items-center justify-end gap-4 mt-8">
+                <a href="{{ route('logout') }}" 
+                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                   class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700">
+                    {{ __('Logout') }}
+                </a>
+                
+                <x-primary-button type="submit" px="px-6" py="py-2" width="" uc="" tracking="">
+                    {{ __('Simpan') }}
+                </x-primary-button>
+            </div>
         </form>
 
-            <div class="flex items-center justify-end gap-4 mt-8">
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <x-buttons.danger-button type="submit">
-                        {{ __('Logout') }}
-                    </x-buttons.danger-button>
-                </form>
-                <x-primary-button px="px-6" py="py-2" width="" uc="" tracking="">{{ __('Simpan') }}</x-primary-button>
-            </div>
+        <!-- Logout Form (terpisah) -->
+        <form id="logout-form" method="POST" action="{{ route('logout') }}" style="display: none;">
+            @csrf
+        </form>
+        
     </div>
 </section>
 
