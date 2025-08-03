@@ -6,6 +6,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Services\Contracts\FileUploadServiceInterface;
 
 class User extends Authenticatable
 {
@@ -24,11 +25,10 @@ class User extends Authenticatable
         'no_whatsapp',
         'tanggal_lahir',
         'jenis_kelamin',
-        'foto_profil',
+        'avatar', 
         'password',
         'provider',
         'provider_id',
-        'avatar',
         'email_verified_at',
     ];
 
@@ -72,20 +72,9 @@ class User extends Authenticatable
      */
     public function getProfilePictureUrlAttribute(): string
     {
-        // Check foto_profil first, then avatar for backward compatibility
-        $profilePicture = $this->foto_profil ?? $this->avatar;
+        $fileUploadService = app(FileUploadServiceInterface::class);
         
-        if ($profilePicture) {
-            // If it's a full URL (like from Google), return as is
-            if (filter_var($profilePicture, FILTER_VALIDATE_URL)) {
-                return $profilePicture;
-            }
-            // If it's a local file path
-            return asset('storage/' . $profilePicture);
-        }
-        
-        // Return default avatar if no profile picture
-        return asset('images/default-avatar.png');
+        return $fileUploadService->getProfilePhotoUrl($this->avatar);
     }
 
     /**
@@ -102,5 +91,49 @@ class User extends Authenticatable
     public function isGoogleUser(): bool
     {
         return $this->provider === 'google';
+    }
+
+    /**
+     * Check if user can change password
+     * Social users might not be able to change password
+     */
+    public function canChangePassword(): bool
+    {
+        return !$this->isSocialUser();
+    }
+
+    /**
+     * Get formatted phone number
+     */
+    public function getFormattedPhoneAttribute(): string
+    {
+        if (!$this->no_whatsapp) {
+            return '';
+        }
+
+        $phone = $this->no_whatsapp;
+        
+        // If starts with +62, format it nicely
+        if (str_starts_with($phone, '+62')) {
+            return '+62 ' . substr($phone, 3);
+        }
+        
+        return $phone;
+    }
+
+    /**
+     * Scope to filter by gender
+     */
+    public function scopeByGender($query, string $gender)
+    {
+        return $query->where('jenis_kelamin', $gender);
+    }
+
+    /**
+     * Scope to filter verified users
+     */
+    public function scopeVerified($query)
+    {
+        return $query->whereNotNull('email_verified_at');
     }
 }
