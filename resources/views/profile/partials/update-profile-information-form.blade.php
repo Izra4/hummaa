@@ -116,12 +116,12 @@
 
             <!-- Action Buttons - PINDAH KE DALAM FORM -->
             <div class="flex items-center justify-end gap-4 mt-8">
-                <a href="{{ route('logout') }}" 
+                <a href="{{ route('logout') }}"
                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
                    class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700">
                     {{ __('Logout') }}
                 </a>
-                
+
                 <x-primary-button type="submit" px="px-6" py="py-2" width="" uc="" tracking="">
                     {{ __('Simpan') }}
                 </x-primary-button>
@@ -132,7 +132,7 @@
         <form id="logout-form" method="POST" action="{{ route('logout') }}" style="display: none;">
             @csrf
         </form>
-        
+
     </div>
 </section>
 
