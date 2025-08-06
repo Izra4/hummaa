@@ -2,22 +2,53 @@
 
 namespace App\Providers;
 
-// use Illuminate\Support\Facades\Gate;
-use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\ServiceProvider;
+use App\Services\Contracts\EmailVerificationServiceInterface;
+use App\Services\Contracts\PasswordResetServiceInterface;
+use App\Services\Contracts\NotificationServiceInterface;
+use App\Services\Contracts\ErrorHandlingServiceInterface;
+use App\Services\Contracts\RateLimitServiceInterface;
+use App\Services\EmailVerificationService;
+use App\Services\PasswordResetService;
+use App\Services\NotificationService;
+use App\Services\ErrorHandlingService;
+use App\Services\RateLimitService;
 
 class AuthServiceProvider extends ServiceProvider
 {
     /**
-     * The model to policy mappings for the application.
-     *
-     * @var array<class-string, class-string>
+     * Register services.
      */
-    protected $policies = [
-        //
-    ];
+    public function register(): void
+    {
+        $this->app->bind(
+            EmailVerificationServiceInterface::class,
+            EmailVerificationService::class
+        );
+
+        $this->app->bind(
+            PasswordResetServiceInterface::class,
+            PasswordResetService::class
+        );
+
+        $this->app->bind(
+            NotificationServiceInterface::class,
+            NotificationService::class
+        );
+
+        $this->app->bind(
+            ErrorHandlingServiceInterface::class,
+            ErrorHandlingService::class
+        );
+
+        $this->app->bind(
+            RateLimitServiceInterface::class,
+            RateLimitService::class
+        );
+    }
 
     /**
-     * Register any authentication / authorization services.
+     * Bootstrap services.
      */
     public function boot(): void
     {

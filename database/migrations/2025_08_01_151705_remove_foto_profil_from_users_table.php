@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Prioritaskan foto_profil jika ada, karena ini field yang lebih baru
+        // Prioritaskan foto_profil jika ada
         DB::statement("
             UPDATE users 
             SET avatar = CASE 

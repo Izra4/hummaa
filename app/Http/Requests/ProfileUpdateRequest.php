@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Password;
+use Illuminate\Validation\Rule;
 
 class ProfileUpdateRequest extends FormRequest
 {
@@ -17,108 +17,43 @@ class ProfileUpdateRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\Rule|array|string>
      */
     public function rules(): array
     {
         return [
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
-            'whatsapp' => ['required', 'string', 'max:20'],
+            'whatsapp' => ['nullable', 'string', 'max:20'],
             'birth_date' => ['nullable', 'date', 'before:today'],
-            'gender' => ['nullable', 'in:Laki-Laki,Perempuan'],
-            'photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'], // 2MB max
-            'password' => [
+            'gender' => ['nullable', Rule::in(['Laki-Laki', 'Perempuan'])],
+            'photo' => [
                 'nullable',
-                'string',
-                Password::min(8)
-                    ->mixedCase()
-                    ->numbers()
-                    ->symbols()
-                    ->uncompromised(),
-                'confirmed'
+                'image',
+                'mimes:jpeg,png,jpg,gif,webp',
+                'max:2048', // 2MB max
+                'dimensions:min_width=100,min_height=100,max_width=2000,max_height=2000'
             ],
-            'password_confirmation' => ['nullable', 'string'],
+            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
+            'password_confirmation' => ['nullable', 'string', 'min:8'],
         ];
     }
 
     /**
-     * Prepare the data for validation.
-     */
-    protected function prepareForValidation(): void
-    {
-        // Clean phone number
-        if ($this->filled('whatsapp')) {
-            $this->merge([
-                'whatsapp' => $this->cleanPhoneNumber($this->whatsapp)
-            ]);
-        }
-
-        // Jika password kosong, hapus dari validasi
-        if (empty($this->password)) {
-            $this->request->remove('password');
-            $this->request->remove('password_confirmation');
-        }
-    }
-
-    /**
-     * Clean phone number format
-     */
-    protected function cleanPhoneNumber(string $phone): string
-    {
-        // Remove all non-numeric characters except +
-        $cleaned = preg_replace('/[^0-9+]/', '', $phone);
-        
-        // Convert 0 prefix to +62 for Indonesian numbers
-        if (str_starts_with($cleaned, '0')) {
-            $cleaned = '+62' . substr($cleaned, 1);
-        }
-        
-        return $cleaned;
-    }
-
-    /**
-     * Get custom attributes for validator errors.
-     *
-     * @return array<string, string>
-     */
-    public function attributes(): array
-    {
-        return [
-            'first_name' => 'nama depan',
-            'last_name' => 'nama belakang',
-            'whatsapp' => 'nomor WhatsApp',
-            'birth_date' => 'tanggal lahir',
-            'gender' => 'jenis kelamin',
-            'photo' => 'foto profil',
-            'password' => 'password',
-            'password_confirmation' => 'konfirmasi password',
-        ];
-    }
-
-    /**
-     * Get custom messages for validator errors.
-     *
-     * @return array<string, string>
+     * Get custom error messages.
      */
     public function messages(): array
     {
         return [
             'first_name.required' => 'Nama depan wajib diisi.',
-            'first_name.max' => 'Nama depan maksimal 255 karakter.',
             'last_name.required' => 'Nama belakang wajib diisi.',
-            'last_name.max' => 'Nama belakang maksimal 255 karakter.',
-            'whatsapp.required' => 'Nomor WhatsApp wajib diisi.',
-            'whatsapp.max' => 'Nomor WhatsApp maksimal 20 karakter.',
             'photo.image' => 'File harus berupa gambar.',
-            'photo.mimes' => 'Format foto harus jpeg, png, jpg, atau gif.',
-            'photo.max' => 'Ukuran foto maksimal 2MB.',
+            'photo.mimes' => 'Format gambar harus jpeg, png, jpg, gif, atau webp.',
+            'photo.max' => 'Ukuran gambar maksimal 2MB.',
+            'photo.dimensions' => 'Dimensi gambar minimal 100x100 pixel dan maksimal 2000x2000 pixel.',
             'password.min' => 'Password minimal 8 karakter.',
             'password.confirmed' => 'Konfirmasi password tidak cocok.',
             'birth_date.before' => 'Tanggal lahir harus sebelum hari ini.',
-            'birth_date.date' => 'Format tanggal lahir tidak valid.',
-            'gender.in' => 'Jenis kelamin tidak valid.',
+            'gender.in' => 'Jenis kelamin harus Laki-Laki atau Perempuan.',
         ];
     }
 }

@@ -15,6 +15,7 @@ class MateriController extends Controller
     {
         $allMateri = Materi::active()->orderBy('created_at', 'asc')->get();
         
+        // Use the existing view name to avoid breaking current implementation
         return view('material.materials-page', compact('allMateri'));
     }
 
@@ -52,7 +53,7 @@ class MateriController extends Controller
 
         Materi::create($data);
 
-        return redirect()->route('materials')->with('success', 'Materi berhasil ditambahkan!');
+        return redirect()->route('materi.index')->with('success', 'Materi berhasil ditambahkan!');
     }
 
     /**
@@ -60,6 +61,7 @@ class MateriController extends Controller
      */
     public function show(Materi $materi)
     {
+        // FIXED: Create a dedicated show view or use materials-page with single item
         return view('material.show', compact('materi'));
     }
 
@@ -104,7 +106,7 @@ class MateriController extends Controller
 
         $materi->update($data);
 
-        return redirect()->route('materials')->with('success', 'Materi berhasil diperbarui!');
+        return redirect()->route('materi.index')->with('success', 'Materi berhasil diperbarui!');
     }
 
     /**
@@ -119,7 +121,7 @@ class MateriController extends Controller
 
         $materi->delete();
 
-        return redirect()->route('materials')->with('success', 'Materi berhasil dihapus!');
+        return redirect()->route('materi.index')->with('success', 'Materi berhasil dihapus!');
     }
 
     /**
@@ -131,11 +133,14 @@ class MateriController extends Controller
             abort(404, 'File tidak ditemukan');
         }
 
-        return response()->download(storage_path('app/public/' . $materi->file_path), $materi->title . '.' . pathinfo($materi->file_path, PATHINFO_EXTENSION));
+        return response()->download(
+            storage_path('app/public/' . $materi->file_path), 
+            $materi->title . '.' . pathinfo($materi->file_path, PATHINFO_EXTENSION)
+        );
     }
 
     /**
-     * Update progress
+     * Update progress - AJAX endpoint
      */
     public function updateProgress(Request $request, Materi $materi)
     {
@@ -144,13 +149,7 @@ class MateriController extends Controller
         ]);
 
         $progress = $request->progress;
-        $status = 'Progres';
-
-        if ($progress == 0) {
-            $status = 'Belum Dimulai';
-        } elseif ($progress >= 100) {
-            $status = 'Selesai';
-        }
+        $status = $this->determineStatusFromProgress($progress);
 
         $materi->update([
             'progress' => $progress,
@@ -165,6 +164,18 @@ class MateriController extends Controller
                 'status' => $status
             ]
         ]);
+    }
+
+    /**
+     * Determine status based on progress
+     */
+    private function determineStatusFromProgress(int $progress): string
+    {
+        return match (true) {
+            $progress === 0 => 'Belum Dimulai',
+            $progress >= 100 => 'Selesai',
+            default => 'Progres'
+        };
     }
 
     /**

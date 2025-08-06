@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\GoogleAuthController;
-use App\Http\Controllers\MateriController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
 
 // Public Routes
 Route::get('/', function () {
@@ -61,18 +61,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('bank-soal.bank-soal-page');
     })->name('bank-soal');
 
-    // Materials Routes - Updated to use controller
-    Route::prefix('materi')->group(function () {
-        Route::get('/', [MateriController::class, 'index'])->name('materials'); // Keep the old name
-        Route::get('/create', [MateriController::class, 'create'])->name('materi.create');
-        Route::post('/', [MateriController::class, 'store'])->name('materi.store');
-        Route::get('/{materi}', [MateriController::class, 'show'])->name('materi.show');
-        Route::get('/{materi}/edit', [MateriController::class, 'edit'])->name('materi.edit');
-        Route::put('/{materi}', [MateriController::class, 'update'])->name('materi.update');
-        Route::delete('/{materi}', [MateriController::class, 'destroy'])->name('materi.destroy');
-        Route::get('/{materi}/download', [MateriController::class, 'download'])->name('materi.download');
-        Route::patch('/{materi}/progress', [MateriController::class, 'updateProgress'])->name('materi.progress.update');
-    });
 
     // Forum
     Route::get('/forum', function () {
