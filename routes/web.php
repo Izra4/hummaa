@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\GoogleAuthController;
+use App\Http\Controllers\MateriController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -66,6 +67,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/forum', function () {
         return view('forum.page');
     })->name('forum');
+
+    // Materials route
+    Route::resource('materials', MateriController::class);
+
+    Route::get('materials/{materi}/download', [MateriController::class, 'download'])->name('materials.download');
+    Route::patch('materials/{materi}/progress', [MateriController::class, 'updateProgress'])->name('materials.updateProgress');
 });
 
 // Public Routes that don't require authentication but might benefit from it

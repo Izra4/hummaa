@@ -14,7 +14,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('materials') }}" class="font-semibold transition-colors duration-300 rounded-lg px-4 py-2
+                    <a href="{{ route('materials.index') }}" class="font-semibold transition-colors duration-300 rounded-lg px-4 py-2
                         {{ request()->routeIs('materials*') ? 'bg-main-bg text-white' : 'text-gray-700 hover:text-main-bg' }}">
                         Materi
                     </a>
