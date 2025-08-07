@@ -25,7 +25,7 @@
                 @endguest
 
                 @auth
-                        <a href="{{ route('materials') }}"
+                        <a href="{{ route('materials.index') }}"
                            class="inline-block rounded-md bg-main-bg px-4 py-2 text-base font-semibold text-white shadow-sm
                            hover:bg-teal-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
                            focus-visible:outline-teal-600 transition-colors duration-300">
