@@ -41,7 +41,7 @@
                             :duration="$materi['duration']"
                             :fileSize="$materi['fileSize']"
                             :progress="$materi['progress']"
-                            :viewLink="route('materi.show', $materi['id'])"
+                            :viewLink="route('materials.show', $materi['id'])"
                             :downloadLink="asset('storage/' . $materi['file_path'])"
                         />
                     @endforeach
