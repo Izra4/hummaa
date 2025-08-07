@@ -56,7 +56,7 @@
             <div class="hidden md:flex items-center space-x-4">
                 <div x-data="{ open: false }" class="relative">
                     <button @click="open = !open" class="flex items-center space-x-2 focus:outline-none">
-                        <img class="h-10 w-10 rounded-full object-cover border-2 border-gray-300"
+                        <img class="h-10 w-10 rounded-full object-cover border-2 border-gray-300" referrerPolicy="no-referrer"
                              src="{{ Auth::user()->avatar ? asset(Auth::user()->profile_picture_url) : asset('images/default-profile.jpeg') }}"
                              alt="{{ Auth::user()->name }}">
                     </button>
