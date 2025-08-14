@@ -13,6 +13,8 @@
         {{ $description }}
     </p>
 
+    <x-bank-soal.filter-bar />
+
     <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
         {{ $slot }}
     </div>
