@@ -61,7 +61,6 @@ class MateriController extends Controller
      */
     public function show(Materi $materi)
     {
-        // FIXED: Create a dedicated show view or use materials-page with single item
         return view('material.show', compact('materi'));
     }
 

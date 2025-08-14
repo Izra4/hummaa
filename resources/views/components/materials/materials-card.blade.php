@@ -1,5 +1,3 @@
-{{-- resources/views/components/materi-card.blade.php --}}
-
 @props([
     'title',
     'description',
@@ -66,7 +64,7 @@
                     Lihat
                 </a>
                 <a href="{{ $downloadLink }}"
-                    class="hover:text-main-blue-button flex items-center gap-1.5 rounded-full border border-gray-200 px-4 py-2 transition">
+                    class="hover:text-main-blue-button flex items-center gap-1.5 rounded-full border border-gray-200 px-4 py-2 transition" download>
                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
                         stroke="#000000" stroke-width="0.00024000000000000003">
                         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
