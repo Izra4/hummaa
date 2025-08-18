@@ -42,26 +42,32 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::delete('/', [ProfileController::class, 'destroy'])->name('destroy');
     });
 
-    // Tryout Routes
-    Route::prefix('tryout')->group(function () {
+    // Event Routes
+    Route::prefix('event')->group(function () {
+        Route::get('/', action: function () {
+            return view('tryout.event-landing-page');
+        })->name('events');
+    });
+
+    // Bank Soal Routes with integrated tryout functionality
+    Route::prefix('bank-soal')->group(function () {
         Route::get('/', function () {
+            return view('bank-soal.bank-soal-page');
+        })->name('bank-soal');
+
+        // Tryout functionality within bank-soal
+        Route::get('/tryout', function () {
             return view('tryout.tryout-landing-page');
         })->name('tryouts');
 
-        Route::get('/details', function () {
+        Route::get('/tryout/details', function () {
             return view('tryout.tryout-page');
         })->name('tryout-detail');
 
-        Route::get('/hasil', function () {
+        Route::get('/tryout/hasil', function () {
             return view('tryout.tryout-completed-page');
         })->name('tryout-completed');
     });
-
-    // Bank Soal
-    Route::get('/bank-soal', function () {
-        return view('bank-soal.bank-soal-page');
-    })->name('bank-soal');
-
 
     // Forum
     Route::get('/forum', function () {

@@ -21,14 +21,14 @@
                 </li>
                 <li>
                     <a href="{{ route('bank-soal') }}" class="font-semibold transition-colors duration-300 rounded-lg px-4 py-2
-                        {{ request()->routeIs('bank-soal*') ? 'bg-main-bg text-white' : 'text-gray-700 hover:text-main-bg' }}">
+                        {{ request()->routeIs('bank-soal*', 'tryouts*', 'tryout-*') ? 'bg-main-bg text-white' : 'text-gray-700 hover:text-main-bg' }}">
                         Bank Soal
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('tryouts') }}" class="font-semibold transition-colors duration-300 rounded-lg px-4 py-2
-                        {{ request()->routeIs('tryouts*') ? 'bg-main-bg text-white' : 'text-gray-700 hover:text-main-bg' }}">
-                        Tryout
+                    <a href="{{ route('events') }}" class="font-semibold transition-colors duration-300 rounded-lg px-4 py-2
+                        {{ request()->routeIs('events*') ? 'bg-main-bg text-white' : 'text-gray-700 hover:text-main-bg' }}">
+                        Event
                     </a>
                 </li>
                 <li>
