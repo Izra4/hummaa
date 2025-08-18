@@ -12,7 +12,9 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            MateriSeeder::class,
+            MateriSeeder::class,         // Seeder Materi yang sudah ada
+            QuestionSeeder::class,       // Seeder Questions, Tryouts, Materials
+            MaterialSeeder::class,      // Seeder untuk kategori materi dan materi
         ]);
     }
 }

@@ -7,6 +7,18 @@ use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
 
+// Custom Events
+use App\Events\TryoutStarted;
+use App\Events\TryoutCompleted;
+use App\Events\AnswerSaved;
+use App\Events\MaterialProgressUpdated;
+
+// Custom Listeners
+use App\Listeners\LogTryoutActivity;
+use App\Listeners\CacheInvalidation;
+use App\Listeners\SendTryoutNotifications;
+
+
 class EventServiceProvider extends ServiceProvider
 {
     /**
@@ -17,6 +29,19 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
+        ],
+        TryoutStarted::class => [
+            LogTryoutActivity::class,
+        ],
+        
+        TryoutCompleted::class => [
+            LogTryoutActivity::class,
+            CacheInvalidation::class,
+            SendTryoutNotifications::class,
+        ],
+        
+        MaterialProgressUpdated::class => [
+            CacheInvalidation::class,
         ],
     ];
 
