@@ -6,8 +6,8 @@
         <span class="text-xs text-gray-500">{{ $post['time'] }}</span>
     </div>
 
-    @if($post['image'])
-        <img src="{{ asset('images/' . $post['image']) }}" alt="Post Image" class="mt-4 w-full rounded-lg object-cover">
+    @if(!empty($post['image']))
+        <img src="{{ $post['image'] }}" alt="{{ $post['title'] }}" class="h-40 w-full object-cover">
     @endif
 
     <p class="mt-4 text-sm leading-6 text-gray-600">{{ $post['content'] }}</p>

@@ -1,42 +1,5 @@
 <x-app-layout>
     @php
-        $activeTab = request()->query('tab', 'untuk-saya');
-
-        $forMePosts = [
-            [
-                'title' => 'Strategi Menjawab Soal Figural dalam Tes TIU',
-                'time' => '2 Jam yang lalu',
-                'image' => 'code-image.png',
-                'content' => 'Saya merasa kesulitan memahami pola pada soal figural, terutama saat bentuknya mulai diputar atau dicerminkan. Kadang pilihan jawabannya mirip semua dan membingungkan. Ada tips atau strategi khusus untuk menyelesaikannya lebih cepat?',
-                'best_comment' => [
-                    'author_name' => '@izzul',
-                    'author_avatar' => 'avatar-izzul.png',
-                    'content' => 'Coba identifikasi perubahan dari gambar pertama ke gambar kedua (rotasi, pencerminan, atau penambahan elemen), lalu terapkan pola itu ke gambar berikutnya. Biasanya polanya berulang.'
-                ],
-                'reply_count' => 5,
-                'author_name' => 'Ikhlasul Amal',
-                'author_avatar' => 'ikhlasul-amal.png'
-            ],
-        ];
-
-        $savedPosts = [
-            [
-                'title' => 'Tips Manajemen Waktu Saat Ujian, Ada yang Punya Pengalaman?',
-                'time' => '1 Hari yang lalu',
-                'image' => null, // Postingan ini tidak punya gambar
-                'content' => 'Setiap kali tryout, saya selalu kehabisan waktu di bagian akhir. Padahal soalnya tidak terlalu sulit, tapi saya terlalu lama di beberapa nomor. Mungkin ada yang punya tips jitu untuk manajemen waktu?',
-                'best_comment' => [
-                    'author_name' => '@budi_sukses',
-                    'author_avatar' => 'avatar-budi.png',
-                    'content' => 'Saran saya, kerjakan soal yang paling mudah dulu untuk membangun momentum. Jangan terpaku pada satu soal lebih dari 2 menit. Kalau sulit, tandai dan tinggalkan dulu, nanti kembali lagi jika ada waktu sisa.'
-                ],
-                'reply_count' => 8,
-                'author_name' => 'Citra Lestari',
-                'author_avatar' => 'avatar-citra.png'
-            ],
-        ];
-
-        $postsToDisplay = ($activeTab == 'disimpan') ? $savedPosts : $forMePosts;
 
     @endphp
 
@@ -75,9 +38,16 @@
                     <x-forum.post-card :post="$post" />
                 @empty
                     <div class="text-center text-gray-500 py-12">
-                        <p>Tidak ada postingan yang disimpan.</p>
+                        <p>Tidak ada postingan.</p>
                     </div>
                 @endforelse
+
+                {{-- pagination opsional --}}
+                @if($paginator)
+                    <div>
+                        {{ $paginator->withQueryString()->links() }}
+                    </div>
+                @endif
             </main>
         </div>
     </div>

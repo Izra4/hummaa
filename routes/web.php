@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\MateriController;
+use \App\Http\Controllers\DiscussionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -64,9 +65,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
     // Forum
-    Route::get('/forum', function () {
-        return view('forum.page');
-    })->name('forum');
+    Route::get('/forum', [DiscussionController::class, 'index'])->name('forum');
 
     // Materials route
     Route::resource('materials', MateriController::class);
