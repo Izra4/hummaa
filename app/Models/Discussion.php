@@ -25,4 +25,9 @@ class Discussion extends Model
     {
         return $this->hasMany(DiscussionCommentar::class, 'discussion_id');
     }
+
+    public function latestComment()
+    {
+        return $this->hasOne(\App\Models\DiscussionCommentar::class, 'discussion_id')->latestOfMany();
+    }
 }

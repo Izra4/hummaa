@@ -2,64 +2,72 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreDiscussionCommentarRequest;
+use App\Http\Requests\UpdateDiscussionCommentarRequest;
+use App\Models\Discussion;
 use App\Models\DiscussionCommentar;
 use Illuminate\Http\Request;
 
 class DiscussionCommentarController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function __construct()
     {
-        //
+        // Wajib login untuk tulis/edit/hapus komentar
+        $this->middleware('auth')->only(['store', 'update', 'destroy', 'edit']);
+    }
+
+    public function store(StoreDiscussionCommentarRequest $request, Discussion $discussion)
+    {
+        $comment = new DiscussionCommentar([
+            'commentar' => $request->validated()['commentar'],
+            'user_id' => auth()->id(),
+        ]);
+        $comment->discussion()->associate($discussion);
+        $comment->save();
+
+        return back()->with('success', 'Komentar ditambahkan.');
+    }
+    public function edit(DiscussionCommentar $comment)
+    {
+        if (auth()->id() !== $comment->user_id) {
+            abort(403);
+        }
+        return view('discussion_comments.edit', compact('comment'));
+    }
+
+    public function update(UpdateDiscussionCommentarRequest $request, DiscussionCommentar $comment)
+    {
+        if (auth()->id() !== $comment->user_id) {
+            abort(403);
+        }
+
+        $comment->update($request->validated());
+
+        if (!$request->wantsJson()) {
+            return back()->with('success', 'Komentar diperbarui.');
+        }
+
+        return response()->json([
+            'message' => 'Komentar diperbarui.',
+            'data' => $comment->load('user'),
+        ]);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Hapus komentar.
      */
-    public function create()
+    public function destroy(Request $request, DiscussionCommentar $comment)
     {
-        //
-    }
+        if (auth()->id() !== $comment->user_id) {
+            abort(403);
+        }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        $comment->delete();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(DiscussionCommentar $discussionCommentar)
-    {
-        //
-    }
+        if (!$request->wantsJson()) {
+            return back()->with('success', 'Komentar dihapus.');
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(DiscussionCommentar $discussionCommentar)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, DiscussionCommentar $discussionCommentar)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(DiscussionCommentar $discussionCommentar)
-    {
-        //
+        return response()->json(['message' => 'Komentar dihapus.']);
     }
 }

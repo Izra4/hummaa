@@ -18,7 +18,9 @@ class DiscussionController extends Controller
     {
         $activeTab = $request->query('tab', 'untuk-saya');
 
-        $query = Discussion::with('user')->latest('created_at');
+        $query = Discussion::with(['user', 'latestComment.user'])
+            ->withCount('comments')
+            ->latest('created_at');
 
         if ($activeTab === 'disimpan') {
             $discussions = collect();
@@ -39,30 +41,50 @@ class DiscussionController extends Controller
 
     private function mapDiscussionToPost(Discussion $d): array
     {
+        $latest = $d->latestComment;
+        $latestComment = null;
+
+        if ($latest) {
+            $latestComment = [
+                'author_name'   => $latest->user->name ?? 'Anonim',
+                'author_avatar' => $this->avatarUrl($latest->user->avatar ?? null),
+                'content'       => $latest->commentar,
+                'time'          => optional($latest->created_at)->diffForHumans(),
+            ];
+        }
+
+        $others = max(($d->comments_count ?? 0) - ($latest ? 1 : 0), 0);
+
         return [
-            'title'         => $d->title,
-            'time'          => optional($d->created_at)->diffForHumans(),
-            'image'         => $this->imageUrl($d->image),
-            'content'       => Str::limit((string) $d->desc, 280),
-            'best_comment' => [
-                'author_name'   => null,
-                'author_avatar' => null,
-                'content'       => null,
-            ],
-            'reply_count' => 0,
-            'author_name'   => $d->user->name ?? 'Anonim',
-            'author_avatar' => $this->userAvatar($d),
+            'id'              => $d->id,
+            'title'           => $d->title,
+            'time'            => optional($d->created_at)->diffForHumans(),
+            'image'           => $this->imageUrl($d->image),
+            'content'         => \Illuminate\Support\Str::limit((string) $d->desc, 280),
+
+            'latest_comment'  => $latestComment,
+            'reply_count'     => $others,
+
+            'author_name'     => $d->user->name ?? 'Anonim',
+            'author_avatar'   => $this->userAvatar($d),
+
+            'comment_post_url'=> route('discussions.comments.store', $d),
         ];
+    }
+
+
+
+    private function avatarUrl(?string $path): string
+    {
+        if (!$path) return asset('images/default-profile.jpeg');
+        if (\Illuminate\Support\Str::startsWith($path, ['http://','https://'])) return $path;
+        $path = preg_replace('#^(public/|storage/)+#', '', $path);
+        return '/storage/' . ltrim($path, '/');
     }
 
     private function userAvatar(Discussion $d): ?string
     {
-        if (!empty($d->user?->avatar)) {
-            return Str::startsWith($d->user->avatar, ['http://','https://'])
-                ? $d->user->avatar
-                : Storage::disk('public')->url($d->user->avatar);
-        }
-        return asset('images/default-avatar.png');
+        return $this->avatarUrl($d->user?->avatar ?? null);
     }
 
     private function imageUrl(?string $path): ?string
@@ -98,7 +120,12 @@ class DiscussionController extends Controller
 
     public function show(Discussion $discussion)
     {
-        $discussion->load('user');
+        $discussion->load([
+            'user',
+            'comments' => fn($q) => $q->latest(),
+            'comments.user',
+        ]);
+
         return view('discussions.show', compact('discussion'));
     }
 

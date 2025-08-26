@@ -3,7 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\MateriController;
-use \App\Http\Controllers\DiscussionController;
+use App\Http\Controllers\DiscussionController;
+use App\Http\Controllers\DiscussionCommentarController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -67,6 +68,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Forum
     Route::get('/forum', [DiscussionController::class, 'index'])->name('forum');
     Route::resource('discussions', DiscussionController::class)->only(['store','show']);
+    Route::resource('discussions.comments', DiscussionCommentarController::class)
+        ->shallow()
+        ->only(['store', 'edit', 'update', 'destroy']);
 
     // Materials route
     Route::resource('materials', MateriController::class);
