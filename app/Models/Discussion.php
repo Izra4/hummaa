@@ -13,7 +13,7 @@ class Discussion extends Model
         'title',
         'image',
         'user_id',
-        'description',
+        'desc',
     ];
 
     public function user()

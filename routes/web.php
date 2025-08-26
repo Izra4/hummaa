@@ -66,6 +66,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Forum
     Route::get('/forum', [DiscussionController::class, 'index'])->name('forum');
+    Route::resource('discussions', DiscussionController::class)->only(['store','show']);
 
     // Materials route
     Route::resource('materials', MateriController::class);

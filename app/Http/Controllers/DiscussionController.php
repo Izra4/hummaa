@@ -62,7 +62,7 @@ class DiscussionController extends Controller
                 ? $d->user->avatar
                 : Storage::disk('public')->url($d->user->avatar);
         }
-        return asset('images/default-avatar.png'); // fallback
+        return asset('images/default-avatar.png');
     }
 
     private function imageUrl(?string $path): ?string
@@ -84,16 +84,17 @@ class DiscussionController extends Controller
         $data['user_id'] = auth()->id() ?? $request->user_id;
 
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('discussion-photos', 'public');
-            $data['image'] = $path;
+            $data['image'] = $request->file('image')->store('discussion-photos', 'public');
+        }
+        try {
+            Discussion::create($data);
+        } catch (\Exception $e){
+            dd($e->getMessage());
         }
 
-        $discussion = Discussion::create($data);
-
-        return redirect()
-            ->route('discussions.show', $discussion)
-            ->with('success', 'Discussion created!');
+         return redirect()->route('forum')->with('success', 'Discussion created!');
     }
+
 
     public function show(Discussion $discussion)
     {
