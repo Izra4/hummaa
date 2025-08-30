@@ -26,7 +26,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('tryouts') }}" class="font-semibold transition-colors duration-300 rounded-lg px-4 py-2
+                    <a href="{{ route('tryout.index') }}" class="font-semibold transition-colors duration-300 rounded-lg px-4 py-2
                         {{ request()->routeIs('tryouts*') ? 'bg-main-bg text-white' : 'text-gray-700 hover:text-main-bg' }}">
                         Events
                     </a>

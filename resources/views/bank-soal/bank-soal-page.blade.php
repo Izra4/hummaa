@@ -6,42 +6,21 @@
 
             <aside class="mb-6 w-full md:mb-0 md:w-1/4">
                 <div class="rounded-xl border border-gray-300 bg-white p-4 shadow-2xl">
-
                     <h2 class="mb-2 px-3 pb-4 text-xl font-extrabold text-gray-800">
                         KELOMPOK <span class="text-main-bg">SOAL</span>
                     </h2>
 
-                    <a href="#" @click.prevent="activeTab = 'tpa'"
-                        :class="{ 'bg-main-blue-button/50 border-l-4 border-main-blue-button  text-white': activeTab === 'tpa', 'text-gray-800 hover:bg-gray-100': activeTab !== 'tpa' }"
-                        class="flex w-full items-center border-b border-b-gray-200 p-3 text-left transition-colors duration-200">
-
-                        <div class="mr-4 flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full"
-                            :class="{ 'bg-main-blue-button': activeTab === 'tpa', 'bg-gray-200': activeTab !== 'tpa' }">
-                            <x-bank-soal.book-icon />
-                        </div>
-                        <span class="text-base font-semibold">Bank Soal TPA</span>
-                    </a>
-
-                    <a href="#" @click.prevent="activeTab = 'tkd'"
-                        :class="{ 'bg-main-blue-button/50 border-l-4 border-main-blue-button text-white': activeTab === 'tkd', 'text-gray-800 hover:bg-gray-100': activeTab !== 'tkd' }"
-                        class="flex w-full items-center border-b border-b-gray-200 p-3 text-left transition-colors duration-200">
-                        <div class="mr-4 flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full"
-                            :class="{ 'bg-main-blue-button': activeTab === 'tkd', 'bg-gray-200': activeTab !== 'tkd' }">
-                            <x-bank-soal.book-icon />
-                        </div>
-                        <span class="text-base font-semibold">Bank Soal TKD</span>
-                    </a>
-
-                    <a href="#" @click.prevent="activeTab = 'tiu'"
-                        :class="{ 'bg-main-blue-button/50 border-l-4 border-main-blue-button text-white': activeTab === 'tiu', 'text-gray-800 hover:bg-gray-100': activeTab !== 'tiu' }"
-                        class="flex w-full items-center border-b border-b-gray-200 p-3 text-left transition-colors duration-200">
-                        <div class="mr-4 flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full"
-                            :class="{ 'bg-main-blue-button': activeTab === 'tiu', 'bg-gray-200': activeTab !== 'tiu' }">
-                            <x-bank-soal.book-icon />
-                        </div>
-                        <span class="text-base font-semibold">Bank Soal TIU</span>
-                    </a>
-
+                    @foreach ($categories as $category)
+                        <a href="#" @click.prevent="activeTab = '{{ $category->name }}'"
+                           :class="{ 'bg-main-blue-button/50 border-l-4 border-main-blue-button text-white': activeTab === '{{ $category->name }}', 'text-gray-800 hover:bg-gray-100': activeTab !== '{{ $category->name }}' }"
+                           class="flex w-full items-center border-b border-b-gray-200 p-3 text-left transition-colors duration-200">
+                            <div class="mr-4 flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full"
+                                 :class="{ 'bg-main-blue-button': activeTab === '{{ $category->name }}', 'bg-gray-200': activeTab !== '{{ $category->name }}' }">
+                                <x-bank-soal.book-icon />
+                            </div>
+                            <span class="text-base font-semibold">Bank Soal {{ $category->name }}</span>
+                        </a>
+                    @endforeach
                 </div>
             </aside>
 
@@ -50,65 +29,34 @@
                     @include('bank-soal.landing-content')
                 </div>
 
-                <div x-show="activeTab === 'tpa'" x-transition.opacity style="display: none;">
-                    <x-bank-soal.bs-content title="Bank Soal Tes Potensi Akademik"
-                        description="PPPKin menyediakan bank soal Tes Potensi Akademik (TPA) yang dirancang untuk mengasah kemampuan berpikir logis, analitis, dan verbal. Soal-soal disusun secara sistematis mencakup berbagai tipe: analogi, silogisme, aritmetika dasar, hingga deret logika. Dengan latihan yang terus-menerus, kamu akan terbiasa menghadapi berbagai variasi soal dan meningkatkan kepercayaan diri dalam menjawab soal-soal TPA.">
+                @foreach ($categories as $category)
+                    <div x-show="activeTab === '{{ $category->name }}'" x-transition.opacity style="display: none;">
+                        <x-bank-soal.bs-content 
+                            title="Bank Soal {{ $category->name }}"
+                            description="{{ $category->description }}">
 
-                        <x-slot:icon>
-                            <div class="mr-4 p-3">
-                                <img src="{{ asset('images/tpa-logo.png') }}" alt="book logo" class="h-14 w-14" >
-                            </div>
-                        </x-slot:icon>
+                            <x-slot:icon>
+                                <div class="mr-4 p-3">
+                                    <img src="{{ asset($category->logo_url) }}" alt="logo" class="h-14 w-14">
+                                </div>
+                            </x-slot:icon>
 
-                        <x-bank-soal.bs-question-card judul="PPPK 2022 Aljabar" jumlahSoal="100"
-                            tryout-url="{{ route('tryout-detail', ['mode' => 'tryout']) }}"
-                            belajar-url="{{ route('tryout-detail', ['mode' => 'belajar']) }}"
-                            forum-url="{{ route('forum') }}" />
-                        <x-bank-soal.bs-question-card judul="PPPK 2022 Silogisme" jumlahSoal="80" />
-                        <x-bank-soal.bs-question-card judul="PPPK 2022 Analogi Verbal" jumlahSoal="120" />
-                        <x-bank-soal.bs-question-card judul="PPPK 2022 Deret Angka" jumlahSoal="100" />
-                        <x-bank-soal.bs-question-card judul="PPPK 2022 Deret Angka" jumlahSoal="100" />
-                        <x-bank-soal.bs-question-card judul="PPPK 2022 Deret Angka" jumlahSoal="100" />
-                    </x-bank-soal.bs-content>
-                </div>
-
-                <div x-show="activeTab === 'tiu'" x-transition.opacity style="display: none;">
-                    <x-bank-soal.bs-content title="Bank Soal Tes Intelegensi Umum"
-                        description="Bank soal TIU di PPPKin dirancang untuk menguji dan mengembangkan kemampuan intelektual secara menyeluruh, mencakup aspek verbal, numerik, dan figural. Setiap soal disusun agar pengguna mampu berpikir kritis, cepat, dan tepat dalam menyelesaikan berbagai jenis permasalahan logika. Latihan secara rutin melalui soal-soal ini akan membantu kamu menjadi lebih siap dan tanggap dalam menghadapi tantangan seleksi PPPK.">
-
-                        <x-slot:icon>
-                            <div class="mr-4 p-3">
-                                <img src="{{ asset('images/tiu-logo.png') }}" alt="book logo" class="h-14 w-14" >
-                            </div>
-                        </x-slot:icon>
-
-                        <x-bank-soal.bs-question-card judul="TIU - Kemampuan Numerik" jumlahSoal="150" />
-                        <x-bank-soal.bs-question-card judul="TIU - Kemampuan Figural" jumlahSoal="110" />
-                        <x-bank-soal.bs-question-card judul="TIU - Kemampuan Verbal" jumlahSoal="95" />
-                        <x-bank-soal.bs-question-card judul="TIU - Kemampuan Verbal" jumlahSoal="95" />
-                        <x-bank-soal.bs-question-card judul="TIU - Kemampuan Verbal" jumlahSoal="95" />
-                        <x-bank-soal.bs-question-card judul="TIU - Kemampuan Verbal" jumlahSoal="95" />
-                    </x-bank-soal.bs-content>
-                </div>
-
-                <div x-show="activeTab === 'tkd'" x-transition.opacity style="display: none;">
-                    <x-bank-soal.bs-content title="Bank Soal Tes Kompetensi Dasar"
-                        description="Melalui bank soal TKD dari PPPKin, kamu dapat memperdalam pemahaman terhadap nilai-nilai dasar ASN seperti integritas, etika pelayanan publik, profesionalisme, serta karakteristik pribadi. Soal-soal disusun mengikuti standar kompetensi yang diujikan, membantu kamu berlatih mengenali situasi, mengambil keputusan, dan menilai sikap yang sesuai dengan peran sebagai ASN profesional.">
-
-                        <x-slot:icon>
-                            <div class="mr-4 p-3">
-                                <img src="{{ asset('images/tkd-logo.png') }}" alt="book logo" class="h-14 w-14" >
-                            </div>
-                        </x-slot:icon>
-
-                        <x-bank-soal.bs-question-card judul="TKD - Kemampuan Numerik" jumlahSoal="150" />
-                        <x-bank-soal.bs-question-card judul="TKD - Kemampuan Figural" jumlahSoal="110" />
-                        <x-bank-soal.bs-question-card judul="TKD - Kemampuan Verbal" jumlahSoal="95" />
-                        <x-bank-soal.bs-question-card judul="TKD - Kemampuan Verbal" jumlahSoal="95" />
-                        <x-bank-soal.bs-question-card judul="TKD - Kemampuan Verbal" jumlahSoal="95" />
-                        <x-bank-soal.bs-question-card judul="TKD - Kemampuan Verbal" jumlahSoal="95" />
-                    </x-bank-soal.bs-content>
-                </div>
+                            {{-- DAFTAR PAKET TRYOUT (DINAMIS) --}}
+                            @forelse ($category->tryouts as $tryout)
+                                <x-bank-soal.bs-question-card 
+                                    judul="{{ $tryout->title }}" 
+                                    jumlahSoal="{{ $tryout->questions()->count() }}"
+                                    
+                                    tryout-url="{{ route('tryout.start', $tryout->tryout_id) }}" 
+                                    belajar-url="#" {{-- Arahkan ke route mode belajar nanti --}}
+                                    />
+                            @empty
+                                <p class="text-center text-gray-500">Belum ada paket tryout untuk kategori ini.</p>
+                            @endforelse
+                            
+                        </x-bank-soal.bs-content>
+                    </div>
+                @endforeach
             </div>
         </div>
     </div>
