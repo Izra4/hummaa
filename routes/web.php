@@ -46,23 +46,23 @@ Route::middleware(['auth', 'verified'])->group(function () {
         });
 
     // Tryout Routes
-    Route::prefix('tryout')->name('tryout.')->group(function () {
-        Route::get('/', function () {
-            return view('tryout.tryout-landing-page');
-        })->name('index');
+    Route::prefix('tryout')
+        ->name('tryout.')
+        ->group(function () {
+            Route::get('/', function () {
+                return view('tryout.tryout-landing-page');
+            })->name('index');
 
-        Route::get('/{tryout_id}', [TryoutController::class, 'start'])->name('start');
+            Route::get('/{tryout_id}', [TryoutController::class, 'start'])->name('start');
 
-        // !! TAMBAHKAN ROUTE INI !!
-        // Route untuk MENERIMA SUBMIT jawaban dari pengguna (POST)
-        Route::post('/submit/{attempt_id}', [TryoutController::class, 'submit'])->name('submit');
+            Route::post('/submit/{attempt_id}', [TryoutController::class, 'submit'])->name('submit');
 
-        // Route untuk MENAMPILKAN HALAMAN HASIL (GET)
-        Route::get('/hasil/{attempt_id}', [TryoutController::class, 'showResult'])->name('result');
-    });
+            Route::get('/hasil/{attempt_id}', [TryoutController::class, 'showResult'])->name('result');
 
+            Route::get('/review/{tryout_id}', [TryoutController::class, 'review'])->name('review');
+        });
 
-    Route::get('/bank-soal', [BankSoalController::class, 'index'])->name('bank-soal');
+    Route::get('/bank-soal', [BankSoalController::class, 'index'])->name('bank-soal.index');
 
     Route::get('/forum', function () {
         return view('forum.page');

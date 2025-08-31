@@ -21,6 +21,7 @@
 
         <main class="flex flex-grow items-center justify-center">
             <div class="w-full max-w-6xl p-4 md:p-8">
+                @include('components.flash')
                 @yield('content')
             </div>
         </main>

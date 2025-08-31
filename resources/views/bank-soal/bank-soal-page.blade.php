@@ -12,10 +12,10 @@
 
                     @foreach ($categories as $category)
                         <a href="#" @click.prevent="activeTab = '{{ $category->name }}'"
-                           :class="{ 'bg-main-blue-button/50 border-l-4 border-main-blue-button text-white': activeTab === '{{ $category->name }}', 'text-gray-800 hover:bg-gray-100': activeTab !== '{{ $category->name }}' }"
-                           class="flex w-full items-center border-b border-b-gray-200 p-3 text-left transition-colors duration-200">
+                            :class="{ 'bg-main-blue-button/50 border-l-4 border-main-blue-button text-white': activeTab === '{{ $category->name }}', 'text-gray-800 hover:bg-gray-100': activeTab !== '{{ $category->name }}' }"
+                            class="flex w-full items-center border-b border-b-gray-200 p-3 text-left transition-colors duration-200">
                             <div class="mr-4 flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full"
-                                 :class="{ 'bg-main-blue-button': activeTab === '{{ $category->name }}', 'bg-gray-200': activeTab !== '{{ $category->name }}' }">
+                                :class="{ 'bg-main-blue-button': activeTab === '{{ $category->name }}', 'bg-gray-200': activeTab !== '{{ $category->name }}' }">
                                 <x-bank-soal.book-icon />
                             </div>
                             <span class="text-base font-semibold">Bank Soal {{ $category->name }}</span>
@@ -31,9 +31,9 @@
 
                 @foreach ($categories as $category)
                     <div x-show="activeTab === '{{ $category->name }}'" x-transition.opacity style="display: none;">
-                        <x-bank-soal.bs-content 
-                            title="Bank Soal {{ $category->name }}"
-                            description="{{ $category->description }}">
+                        <x-bank-soal.bs-content title="Bank Soal {{ $category->name }}"
+                            description="{{ $category->description }}"
+                            :filters="$filters">
 
                             <x-slot:icon>
                                 <div class="mr-4 p-3">
@@ -41,19 +41,15 @@
                                 </div>
                             </x-slot:icon>
 
-                            {{-- DAFTAR PAKET TRYOUT (DINAMIS) --}}
                             @forelse ($category->tryouts as $tryout)
-                                <x-bank-soal.bs-question-card 
-                                    judul="{{ $tryout->title }}" 
+                                <x-bank-soal.bs-question-card judul="{{ $tryout->title }}"
                                     jumlahSoal="{{ $tryout->questions()->count() }}"
-                                    
-                                    tryout-url="{{ route('tryout.start', $tryout->tryout_id) }}" 
-                                    belajar-url="#" {{-- Arahkan ke route mode belajar nanti --}}
-                                    />
+                                    tryout-url="{{ route('tryout.start', $tryout->tryout_id) }}"
+                                    belajar-url="{{ route('tryout.review', ['tryout_id' => $tryout->tryout_id, 'mode' => 'belajar']) }}" />
                             @empty
                                 <p class="text-center text-gray-500">Belum ada paket tryout untuk kategori ini.</p>
                             @endforelse
-                            
+
                         </x-bank-soal.bs-content>
                     </div>
                 @endforeach

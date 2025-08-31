@@ -1,7 +1,12 @@
 @extends('layouts.tryout-layout')
 
 @section('content')
-    <div x-data='ujianState(@json($questions), {{ $attemptId }}, {{ $tryout->duration_minutes }})'>
+    <div
+        x-data='ujianState(
+    @json($questions),
+     {{ $attempt->attempt_id }},
+       {{ $tryout->duration_minutes }},
+        @json($userAnswers ?? []))'>
         <div class="flex flex-col gap-6 lg:flex-row lg:items-start">
             <div class="w-full lg:w-1/3">
                 <x-tryout.grid-question-number :title="$tryout->title" :imageUrl="asset('images/tpa-logo.png')" />
@@ -15,7 +20,7 @@
     </div>
 
     <script>
-        function ujianState(questionsData, attemptId, durationMinutes) {
+        function ujianState(questionsData, attemptId, durationMinutes, initialAnswers = {}) {
             const urlParams = new URLSearchParams(window.location.search);
             const pageMode = urlParams.get('mode') || 'tryout';
 
@@ -27,7 +32,7 @@
 
                 // STATE
                 currentIndex: 0,
-                answers: {},
+                answers: initialAnswers,
                 isModalOpen: false,
 
                 // COMPUTED PROPERTIES (Getters)

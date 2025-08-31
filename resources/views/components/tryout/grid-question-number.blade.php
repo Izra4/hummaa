@@ -3,7 +3,7 @@
 <div class="flex h-full flex-col rounded-lg bg-white p-6 pt-0">
     <div class="border-gray-200 mb-6 flex items-center gap-4 rounded-xl border p-4">
 
-        <a href="{{ route('bank-soal') }}" class="rounded-full p-2 hover:bg-gray-100">
+        <a href="{{ route('bank-soal.index') }}" class="rounded-full p-2 hover:bg-gray-100">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />

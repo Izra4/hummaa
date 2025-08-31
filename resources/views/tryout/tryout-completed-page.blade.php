@@ -36,7 +36,7 @@
         </div>
 
         <div class="mt-12">
-            <a href="{{ route('bank-soal') }}" 
+            <a href="{{ route('bank-soal.index') }}" 
                 class="rounded-lg bg-main-blue-button px-8 py-3 font-semibold text-white transition-colors hover:bg-blue-700">
                 Kembali ke Bank Soal
             </a>

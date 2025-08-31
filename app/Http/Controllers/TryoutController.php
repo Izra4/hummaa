@@ -22,22 +22,17 @@ class TryoutController extends Controller
         $tryout = Tryout::findOrFail($tryout_id);
         $user = Auth::user();
 
-        $completedAttempt = TryoutAttempt::where('user_id', $user->id)->where('tryout_id', $tryout_id)->where('status', 'submitted')->first();
-
-        if ($completedAttempt) {
-            return redirect()->route('tryout.result', ['attempt_id' => $completedAttempt->attempt_id]);
-        }
-
         $attempt = TryoutAttempt::create([
             'user_id' => $user->id,
             'tryout_id' => $tryout->tryout_id,
             'start_time' => now(),
-            'status' => 'in_progress', 
+            'status' => 'in_progress',
         ]);
 
+        // Kode di bawah ini untuk mengambil dan memformat soal tidak perlu diubah
         $questions = $tryout
             ->questions()
-            ->with(['options', 'questionType']) 
+            ->with(['options', 'questionType'])
             ->orderBy('tryout_questions.question_number', 'asc')
             ->get();
 
@@ -60,7 +55,7 @@ class TryoutController extends Controller
         return view('tryout.tryout-page', [
             'tryout' => $tryout,
             'questions' => $formattedQuestions,
-            'attemptId' => $attempt->attempt_id,
+            'attempt' => $attempt,
         ]);
     }
 
@@ -160,6 +155,56 @@ class TryoutController extends Controller
 
         return view('tryout.tryout-completed-page', [
             'attempt' => $attempt,
+        ]);
+    }
+
+    public function review($tryout_id)
+    {
+        $user = Auth::user();
+        $tryout = Tryout::findOrFail($tryout_id);
+
+        $latestAttempt = TryoutAttempt::where('user_id', $user->id)->where('tryout_id', $tryout_id)->where('status', 'submitted')->latest('updated_at')->first();
+
+        if (!$latestAttempt) {
+            return redirect()->route('bank-soal.index')->with('error', 'Anda harus menyelesaikan mode tryout terlebih dahulu sebelum masuk ke mode belajar.');
+        }
+
+        $questions = $tryout
+            ->questions()
+            ->with(['options', 'questionType'])
+            ->get();
+        $userAnswers = UserAnswer::where('attempt_id', $latestAttempt->attempt_id)->get()->keyBy('question_id');
+
+        $formattedQuestions = $questions->map(function ($q, $index) {
+            return [
+                'id' => $q->question_id,
+                'number' => $index + 1,
+                'text' => $q->question_text,
+                'type' => $q->questionType->type == 'Pilihan Ganda' ? 'pilihan_ganda' : 'isian',
+                'image' => $q->image_url ? asset($q->image_url) : null,
+                'options' => $q->options->mapWithKeys(function ($opt, $optIndex) {
+                    $key = chr(65 + $optIndex);
+                    return [$key => ['id' => $opt->option_id, 'text' => $opt->option_text]];
+                }),
+                'explanation' => $q->explanation,
+                'correctAnswer' => $q->questionType->type == 'Pilihan Ganda' ? ($q->options->search(fn($opt) => $opt->is_correct) !== false ? chr(65 + $q->options->search(fn($opt) => $opt->is_correct)) : null) : $q->correct_answer_text,
+            ];
+        });
+
+        $formattedAnswers = [];
+        foreach ($userAnswers as $question_id => $answer) {
+            $formattedAnswers[$question_id] = [
+                'key' => $answer->selectedOption ? chr(65 + $questions->find($question_id)->options->search(fn($opt) => $opt->option_id == $answer->selected_option_id)) : null,
+                'optionId' => $answer->selected_option_id,
+                'text' => $answer->answer_text,
+            ];
+        }
+
+        return view('tryout.tryout-page', [
+            'tryout' => $tryout,
+            'attempt' => $latestAttempt,
+            'questions' => $formattedQuestions,
+            'userAnswers' => $formattedAnswers,
         ]);
     }
 }
