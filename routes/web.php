@@ -4,6 +4,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\BankSoalController;
 use App\Http\Controllers\MateriController;
+use App\Http\Controllers\DiscussionController;
+use App\Http\Controllers\DiscussionCommentarController;
 use App\Http\Controllers\TryoutController;
 use Illuminate\Support\Facades\Route;
 
@@ -64,9 +66,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/bank-soal', [BankSoalController::class, 'index'])->name('bank-soal.index');
 
-    Route::get('/forum', function () {
-        return view('forum.page');
-    })->name('forum');
+
+    // Forum
+    Route::get('/forum', [DiscussionController::class, 'index'])->name('forum');
+    Route::resource('discussions', DiscussionController::class)->only(['store','show']);
+    Route::resource('discussions.comments', DiscussionCommentarController::class)
+        ->shallow()
+        ->only(['store', 'edit', 'update', 'destroy']);
 
     Route::resource('materials', MateriController::class);
 
