@@ -1,4 +1,4 @@
-@props(['action' => '#'])
+@props(['action' => '#', 'filters' => []]) 
 
 <form action="{{ $action }}" method="GET" class="mb-8">
     <div class="flex w-full flex-col items-center gap-4 md:flex-row">
@@ -10,10 +10,16 @@
                 </svg>
             </div>
             <input type="text" name="search" placeholder="Cari"
+                value="{{ $filters['search'] ?? '' }}"
                 class="w-full rounded-xl border border-main-bg py-2 pl-10 pr-4 shadow-xl text-gray-700 focus:border-main-bg focus:ring-main-bg">
         </div>
     
-        <div x-data="{ open: false, selectedYear: 'Tahun', yearValue: '' }" class="relative w-full md:w-auto">
+        <div x-data="{ 
+            open: false, 
+            selectedYear: '{{ $filters['year'] ?? 'Tahun' }}', 
+            yearValue: '{{ $filters['year'] ?? '' }}' 
+         }" 
+         class="relative w-full md:w-auto">
             
             <input type="hidden" name="year" x-model="yearValue">
 
@@ -31,11 +37,11 @@
                  class="absolute right-0 z-10 mt-2 w-full origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                  style="display: none;">
                 <div class="py-1">
-                    @for ($year = 2024; $year >= 2015; $year--)
-                        <a href="#" @click.prevent="selectedYear = '{{ $year }}'; yearValue = '{{ $year }}'; open = false"
-                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                           {{ $year }}
-                        </a>
+                    @for ($year = 2025; $year >= 2015; $year--)
+                    <a href="#" @click.prevent="selectedYear = '{{ $year }}'; yearValue = '{{ $year }}'; open = false; $nextTick(() => { $el.closest('form').submit() });"
+                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        {{ $year }}
+                     </a>
                     @endfor
                 </div>
             </div>

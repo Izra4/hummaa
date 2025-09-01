@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Ujian Online</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -20,6 +21,7 @@
 
         <main class="flex flex-grow items-center justify-center">
             <div class="w-full max-w-6xl p-4 md:p-8">
+                @include('components.flash')
                 @yield('content')
             </div>
         </main>

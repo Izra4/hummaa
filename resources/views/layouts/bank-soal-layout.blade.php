@@ -18,6 +18,7 @@
 
         <main>
             <div class="w-full p-4 md:p-8">
+                @include('components.flash')
                 @yield('content')
             </div>
         </main>

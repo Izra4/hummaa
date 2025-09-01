@@ -1,4 +1,4 @@
-@props(['title', 'description'])
+@props(['title', 'description', 'filters'])
 
 <div class="rounded-xl bg-white p-3">
     <div class="mb-6 flex items-center">
@@ -13,7 +13,10 @@
         {{ $description }}
     </p>
 
-    <x-bank-soal.filter-bar />
+    <x-bank-soal.filter-bar 
+    :action="route('bank-soal.index')" 
+    :filters="$filters" 
+    />
 
     <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
         {{ $slot }}
