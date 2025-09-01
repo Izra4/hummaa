@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\User; 
+use App\Models\User;
 use App\Models\QuestionBankCategory;
 use App\Models\QuestionType;
 use App\Models\Tryout;
@@ -31,7 +31,7 @@ class DummyTryoutSeeder extends Seeder
         $this->command->info('Membuat data simulasi tryout...');
 
         // 1. Buat Kategori & Tipe Soal
-        $qbc_tpa = QuestionBankCategory::create(['name' => 'Tes Potensi Akademik']);
+        $qbc_tpa = QuestionBankCategory::firstOrCreate(['name' => 'Tes Potensi Akademik']);
         $qt_pg = QuestionType::create(['type' => 'Pilihan Ganda']);
         $qt_isian = QuestionType::create(['type' => 'Isian Singkat']);
 

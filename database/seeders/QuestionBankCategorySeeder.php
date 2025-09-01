@@ -33,9 +33,11 @@ class QuestionBankCategorySeeder extends Seeder
 
         foreach ($categories as $category) {
             QuestionBankCategory::firstOrCreate(
-                ['name' => $category['name']], 
-                ['logo_url' => $category['logo_url']], 
-                ['description' => $category['description']], 
+                ['name' => $category['name']],
+                [
+                    'logo_url' => $category['logo_url'],
+                    'description' => $category['description']
+                ]
             );
         }
     }

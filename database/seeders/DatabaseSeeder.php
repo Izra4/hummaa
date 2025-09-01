@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             QuestionBankCategorySeeder::class,
             MateriSeeder::class,
+            DummyTryoutSeeder::class,
         ]);
     }
 }
