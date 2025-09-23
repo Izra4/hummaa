@@ -27,6 +27,8 @@ class BankSoalController extends Controller
             },
         ])->get();
 
+        // dd( $categories);
+
         return view('bank-soal.bank-soal-page', [
             'categories' => $categories,
             'filters' => ['search' => $search, 'year' => $year], // Kirim balik nilai filter ke view

@@ -207,4 +207,26 @@ class TryoutController extends Controller
             'userAnswers' => $formattedAnswers,
         ]);
     }
+
+    public function showHistory($tryout_id)
+    {
+        // 1. Ambil informasi tryout berdasarkan ID
+        $tryout = Tryout::findOrFail($tryout_id);
+
+        // 2. Ambil pengguna yang sedang login
+        $user = Auth::user();
+
+        // 3. Ambil semua riwayat pengerjaan (attempts) yang relevan dari database
+        $attempts = TryoutAttempt::where('user_id', $user->id)
+            ->where('tryout_id', $tryout->tryout_id)
+            ->where('status', 'submitted') // Hanya tampilkan yang sudah selesai
+            ->orderBy('end_time', 'desc') // Urutkan dari yang terbaru
+            ->get();
+
+        // 4. Kirim data ke view baru
+        return view('tryout.tryout-history', [
+            'tryout' => $tryout,
+            'attempts' => $attempts,
+        ]);
+    }
 }
