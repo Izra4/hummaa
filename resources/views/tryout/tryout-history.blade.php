@@ -14,7 +14,8 @@
                 <h4 class="mt-4 text-xl font-semibold text-gray-700">Riwayat Tidak Ditemukan</h4>
                 <p class="text-gray-500">Anda belum pernah menyelesaikan tryout ini.</p>
                 <a href="{{ route('tryout.start',['tryout_id'=>$tryout->tryout_id]) }}" 
-                   class="mt-6 inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium px-5 py-2 rounded-lg">
+                   class="mt-6 inline-block bg-main-bg hover:bg-teal-800 text-white font-medium px-5 py-2 rounded-lg
+                   transition-colors duration-300">
                     Mulai Kerjakan Sekarang
                 </a>
             </div>
