@@ -7,7 +7,7 @@
      class="rounded-lg border border-l-4 border-y-2 border-r-2 border-main-bg bg-white p-6 shadow-sm">
 
     <div class="flex items-center justify-between">
-        <p class="text-2xl font-bold text-gray-900">{{ $post['title'] }}</p>
+        <p class="text-xl font-bold text-gray-900">{{ $post['title'] }}</p>
         <span class="text-xs text-gray-500">{{ $post['time'] }}</span>
     </div>
 
@@ -37,28 +37,34 @@
 
     <p class="mt-4 text-sm leading-6 text-gray-600">{{ $post['content'] }}</p>
 
-    @if(data_get($post, 'latest_comment'))
-        <div class="mt-4 rounded-lg bg-gray-50 p-4">
-            <div class="flex items-center gap-x-3">
-                <img src="{{ data_get($post, 'latest_comment.author_avatar') }}"
-                     alt="Avatar" class="h-6 w-6 rounded-full">
-                <span class="text-sm font-semibold text-gray-800">
-              {{ data_get($post, 'latest_comment.author_name') }}
-          </span>
-                <span class="text-xs text-gray-500">
-              • {{ data_get($post, 'latest_comment.time') }}
-          </span>
+    
+    @if(($post['comments']->count() ?? 0) > 0)
+    <div x-data="{ visibleCount: 5 }" class="mt-4 space-y-3">
+        {{-- loop komentar --}}
+        @foreach($post['comments'] as $index => $comment)
+            <div x-show="{{ $index }} < visibleCount" class="rounded-lg bg-gray-50 p-3">
+                <div class="flex items-center gap-x-2">
+                    <img src="{{ $comment['avatar'] }}"
+                         alt="Avatar"
+                         class="h-6 w-6 rounded-full">
+                    <span class="text-sm font-semibold">{{ $comment['author'] }}</span>
+                    <span class="text-xs text-gray-500">• {{ $comment['time'] }}</span>
+                </div>
+                <p class="mt-1 text-sm text-gray-700">{{ $comment['content'] }}</p>
             </div>
-            <p class="mt-2 text-sm text-gray-600">
-                {{ data_get($post, 'latest_comment.content') }}
-            </p>
-        </div>
-    @endif
+        @endforeach
 
-    @if(($post['reply_count'] ?? 0) > 0)
-        <p class="mt-4 text-xs text-gray-500">
-            {{ $post['reply_count'] }} balasan lainnya
-        </p>
+        <div x-show="visibleCount < {{ $post['comments']->count() }}" class="text-center">
+            <button 
+                @click="visibleCount += 5"
+                class="mt-2 text-sm text-main-bg hover:underline"
+            >
+                Lihat 
+                (<span x-text="{{ $post['comments']->count() }} - visibleCount"></span>)
+                balasan lainnya 
+            </button>
+        </div>
+    </div>
     @endif
 
     @auth

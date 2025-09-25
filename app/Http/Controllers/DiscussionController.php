@@ -18,9 +18,11 @@ class DiscussionController extends Controller
     {
         $tryoutId = $request->query('tryout_id');
 
-        $query = Discussion::with(['user', 'latestComment.user'])
-            ->withCount('comments')
-            ->latest('created_at');
+        $query = Discussion::with([
+            'user', 
+            'latestComment.user', 
+            'comments.user' 
+        ])->withCount('comments')->latest('created_at');
 
         if ($tryoutId) {
             $query->where('tryout_id', $tryoutId);
@@ -63,7 +65,13 @@ class DiscussionController extends Controller
             'time'            => optional($d->created_at)->diffForHumans(),
             'image'           => $this->imageUrl($d->image),
             'content'         => \Illuminate\Support\Str::limit((string) $d->desc, 280),
-
+            'comments' => $d->comments->map(fn($c) => [
+                'id'      => $c->id,
+                'author'  => $c->user->name ?? 'Anonim',
+                'avatar'  => $this->avatarUrl($c->user->avatar ?? null),
+                'content' => $c->commentar,
+                'time'    => optional($c->created_at)->diffForHumans(),
+            ]),
             'latest_comment'  => $latestComment,
             'reply_count'     => $others,
 
@@ -106,6 +114,9 @@ class DiscussionController extends Controller
     {
         $data = $request->validated();
         $data['user_id'] = auth()->id() ?? $request->user_id;
+        $tryoutId = $request->input('tryout_id');
+
+        $data['tryout_id'] = $tryoutId;
 
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('discussion-photos', 'public');
@@ -113,7 +124,7 @@ class DiscussionController extends Controller
         try {
             Discussion::create($data);
         } catch (\Exception $e){
-            dd($e->getMessage());
+            return back()->withInput()->withErrors(['error' => 'Failed to create discussion: ' . $e->getMessage()]);
         }
 
          return redirect()->route('forum')->with('success', 'Discussion created!');

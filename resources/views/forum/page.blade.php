@@ -1,27 +1,6 @@
 <x-app-layout>
-    <div class="bg-gray-50">
-        <div class="container mx-auto grid grid-cols-1 gap-8 px-6 py-12 lg:grid-cols-4">
-            <aside class="space-y-6 lg:col-span-1">
-                <div class="space-y-2 rounded-lg border border-gray-200 p-4">
-                    <x-forum.sidebar
-                        href="{{ route('forum', ['tab' => 'untuk-saya']) }}"
-                        :active="$activeTab == 'untuk-saya'"
-                        icon-inactive="heart.png"
-                        icon-active="heart-filled.png">
-                        Untuk Saya
-                    </x-forum.sidebar>
-
-                    <x-forum.sidebar
-                        href="{{ route('forum', ['tab' => 'disimpan']) }}"
-                        :active="$activeTab == 'disimpan'"
-                        icon-inactive="save.png"
-                        icon-active="save-filled.png">
-                        Disimpan
-                    </x-forum.sidebar>
-                </div>
-                <x-forum.popular-topics />
-            </aside>
-
+    <div class="bg-gray-50 flex justify-center w-full">
+        <div class="p-12 w-full max-w-5xl">
             <main class="space-y-6 lg:col-span-3">
                 <form
                     action="{{ route('discussions.store') }}"
@@ -73,6 +52,7 @@
                             Posting
                         </button>
                     </div>
+                    <input type="hidden" name="tryout_id" value="{{ request('tryout_id') }}">
                 </form>
 
                 @forelse($postsToDisplay as $post)

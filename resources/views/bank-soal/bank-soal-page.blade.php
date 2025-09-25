@@ -46,7 +46,9 @@
                                     jumlahSoal="{{ $tryout->questions()->count() }}"
                                     tryoutUrl="{{ route('tryout.start', $tryout->tryout_id) }}"
                                     belajarUrl="{{ route('tryout.learn', ['tryout_id' => $tryout->tryout_id, 'mode' => 'belajar']) }}"
-                                    historyUrl="{{ route('tryout.history', ['tryout_id' => $tryout->tryout_id])}}" />
+                                    historyUrl="{{ route('tryout.history', ['tryout_id' => $tryout->tryout_id])}}" 
+                                    forumUrl="{{ route('forum', ['tryout_id' => $tryout->tryout_id]) }}"
+                                />
                             @empty
                                 <p class="text-center text-gray-500">Belum ada paket tryout untuk kategori ini.</p>
                             @endforelse
