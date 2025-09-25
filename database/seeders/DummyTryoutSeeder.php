@@ -14,9 +14,6 @@ use Carbon\Carbon;
 
 class DummyTryoutSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $user = User::firstOrCreate(
@@ -30,57 +27,60 @@ class DummyTryoutSeeder extends Seeder
 
         $this->command->info('Membuat data simulasi tryout...');
 
-        // 1. Buat Kategori & Tipe Soal
+        // 1. Buat Kategori & Tipe Soal (sekali saja)
         $qbc_tpa = QuestionBankCategory::firstOrCreate(['name' => 'Tes Potensi Akademik']);
-        $qt_pg = QuestionType::create(['type' => 'Pilihan Ganda']);
-        $qt_isian = QuestionType::create(['type' => 'Isian Singkat']);
+        $qt_pg = QuestionType::firstOrCreate(['type' => 'Pilihan Ganda']);
+        $qt_isian = QuestionType::firstOrCreate(['type' => 'Isian Singkat']);
 
-        // 2. Buat Paket Tryout
-        $tryout = Tryout::create([
-            'title' => 'Tryout Simulasi TPA #1',
-            'duration_minutes' => 60,
-            'year' => 2025,
-            'category_id' => 1,
-        ]);
+        // 🔹 2 Tryout Dummy
+        for ($t = 1; $t <= 2; $t++) {
+            $tryout = Tryout::create([
+                'title' => "Tryout Simulasi TPA #{$t}",
+                'duration_minutes' => 60,
+                'year' => 2025,
+                'category_id' => $qbc_tpa->id,
+            ]);
 
-        // 3. Buat 50 Soal Dummy
-        for ($i = 1; $i <= 50; $i++) {
-            $isPilihanGanda = ($i % 5 != 0); // Buat 1 soal isian setiap 5 soal
+            // 3. Buat 50 Soal Dummy untuk tiap tryout
+            for ($i = 1; $i <= 50; $i++) {
+                $isPilihanGanda = ($i % 5 != 0); // setiap kelipatan 5 → soal isian
 
-            if ($isPilihanGanda) {
-                // Buat Soal Pilihan Ganda
-                $question = Question::create([
-                    'category_id' => $qbc_tpa->id,
-                    'question_type_id' => $qt_pg->id,
-                    'question_text' => "Ini adalah isi dari pertanyaan pilihan ganda nomor {$i}. Konsep apa yang diuji pada soal ini?",
-                    'explanation' => "Ini adalah pembahasan untuk soal nomor {$i}. Kunci jawabannya adalah B karena alasan logis.",
-                    'image_url' => ($i == 3) ? 'images/contoh-soal-gambar.jpg' : null, // Contoh gambar di soal no 3
-                ]);
+                if ($isPilihanGanda) {
+                    // Soal Pilihan Ganda
+                    $question = Question::create([
+                        'category_id' => $qbc_tpa->id,
+                        'question_type_id' => $qt_pg->id,
+                        'question_text' => "({$t}) Ini adalah isi dari pertanyaan pilihan ganda nomor {$i}. Konsep apa yang diuji?",
+                        'explanation' => "({$t}) Pembahasan soal nomor {$i}. Kunci jawabannya adalah B.",
+                        'image_url' => ($i == 3) ? 'images/contoh-soal-gambar.jpg' : null,
+                    ]);
 
-                // Buat Opsi Jawabannya
-                Option::create(['question_id' => $question->question_id, 'option_text' => "Pilihan A untuk soal {$i}", 'is_correct' => false]);
-                Option::create(['question_id' => $question->question_id, 'option_text' => "Pilihan B untuk soal {$i}", 'is_correct' => true]);
-                Option::create(['question_id' => $question->question_id, 'option_text' => "Pilihan C untuk soal {$i}", 'is_correct' => false]);
-                Option::create(['question_id' => $question->question_id, 'option_text' => "Pilihan D untuk soal {$i}", 'is_correct' => false]);
-            } else {
-                // Buat Soal Isian
-                $question = Question::create([
-                    'category_id' => $qbc_tpa->id,
-                    'question_type_id' => $qt_isian->id,
-                    'question_text' => "Ini adalah isi dari pertanyaan isian singkat nomor {$i}. Siapakah penemu bola lampu?",
-                    'explanation' => "Pembahasan soal isian nomor {$i}: Penemu bola lampu adalah Thomas Alva Edison.",
-                    'correct_answer_text' => 'Thomas Alva Edison'
+                    Option::create(['question_id' => $question->question_id, 'option_text' => "Pilihan A untuk soal {$i}", 'is_correct' => false]);
+                    Option::create(['question_id' => $question->question_id, 'option_text' => "Pilihan B untuk soal {$i}", 'is_correct' => true]);
+                    Option::create(['question_id' => $question->question_id, 'option_text' => "Pilihan C untuk soal {$i}", 'is_correct' => false]);
+                    Option::create(['question_id' => $question->question_id, 'option_text' => "Pilihan D untuk soal {$i}", 'is_correct' => false]);
+                } else {
+                    // Soal Isian
+                    $question = Question::create([
+                        'category_id' => $qbc_tpa->id,
+                        'question_type_id' => $qt_isian->id,
+                        'question_text' => "({$t}) Ini adalah isi dari pertanyaan isian singkat nomor {$i}. Siapakah penemu bola lampu?",
+                        'explanation' => "({$t}) Pembahasan soal isian nomor {$i}: Penemu bola lampu adalah Thomas Alva Edison.",
+                        'correct_answer_text' => 'Thomas Alva Edison'
+                    ]);
+                }
+
+                // Hubungkan ke tryout
+                TryoutQuestion::create([
+                    'tryout_id' => $tryout->tryout_id,
+                    'question_id' => $question->question_id,
+                    'question_number' => $i,
                 ]);
             }
 
-            // 4. Hubungkan soal ke paket tryout
-            TryoutQuestion::create([
-                'tryout_id' => $tryout->tryout_id,
-                'question_id' => $question->question_id,
-                'question_number' => $i,
-            ]);
+            $this->command->info("Seeder untuk Tryout #{$t} selesai!");
         }
 
-        $this->command->info('Seeder simulasi tryout selesai!');
+        $this->command->info('Seeder simulasi 2 tryout selesai!');
     }
 }
