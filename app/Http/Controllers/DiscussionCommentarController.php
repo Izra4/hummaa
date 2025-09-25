@@ -12,7 +12,6 @@ class DiscussionCommentarController extends Controller
 {
     public function __construct()
     {
-        // Wajib login untuk tulis/edit/hapus komentar
         $this->middleware('auth')->only(['store', 'update', 'destroy', 'edit']);
     }
 

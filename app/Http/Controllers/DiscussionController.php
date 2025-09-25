@@ -16,28 +16,30 @@ class DiscussionController extends Controller
 
     public function index(Request $request)
     {
-        $activeTab = $request->query('tab', 'untuk-saya');
+        $tryoutId = $request->query('tryout_id');
 
         $query = Discussion::with(['user', 'latestComment.user'])
             ->withCount('comments')
             ->latest('created_at');
 
-        if ($activeTab === 'disimpan') {
-            $discussions = collect();
-        } else {
-            $discussions = $query->paginate(10);
+        if ($tryoutId) {
+            $query->where('tryout_id', $tryoutId);
         }
 
-        $postsToDisplay = $discussions instanceof \Illuminate\Pagination\LengthAwarePaginator
-            ? $discussions->getCollection()->map(fn ($d) => $this->mapDiscussionToPost($d))
-            : collect();
+        $discussions = $query->paginate(10);
+
+        // map langsung ke collection
+        $postsToDisplay = collect($discussions->items())
+        ->map(fn ($d) => $this->mapDiscussionToPost($d));
+
 
         return view('forum.page', [
-            'activeTab'      => $activeTab,
             'postsToDisplay' => $postsToDisplay,
-            'paginator'      => $discussions instanceof \Illuminate\Pagination\LengthAwarePaginator ? $discussions : null,
+            'paginator'      => $discussions,
+            'tryoutId'       => $tryoutId,
         ]);
     }
+
 
     private function mapDiscussionToPost(Discussion $d): array
     {

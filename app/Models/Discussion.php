@@ -10,6 +10,7 @@ class Discussion extends Model
     use HasFactory;
 
     protected $fillable = [
+        'tryout_id',
         'title',
         'image',
         'user_id',
