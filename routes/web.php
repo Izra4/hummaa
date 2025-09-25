@@ -62,6 +62,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/hasil/{attempt_id}', [TryoutController::class, 'showResult'])->name('result');
 
             Route::get('/review/{tryout_id}', [TryoutController::class, 'review'])->name('review');
+
+            Route::get('/{tryout_id}/learn', [TryoutController::class, 'startLearningMode'])->name('learn');
+
+            Route::get('{tryout_id}/history', [TryoutController::class, 'showHistory'])->name('history');
         });
 
     Route::get('/bank-soal', [BankSoalController::class, 'index'])->name('bank-soal.index');

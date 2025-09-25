@@ -44,8 +44,9 @@
                             @forelse ($category->tryouts as $tryout)
                                 <x-bank-soal.bs-question-card judul="{{ $tryout->title }}"
                                     jumlahSoal="{{ $tryout->questions()->count() }}"
-                                    tryout-url="{{ route('tryout.start', $tryout->tryout_id) }}"
-                                    belajar-url="{{ route('tryout.review', ['tryout_id' => $tryout->tryout_id, 'mode' => 'belajar']) }}" />
+                                    tryoutUrl="{{ route('tryout.start', $tryout->tryout_id) }}"
+                                    belajarUrl="{{ route('tryout.learn', ['tryout_id' => $tryout->tryout_id, 'mode' => 'belajar']) }}"
+                                    historyUrl="{{ route('tryout.history', ['tryout_id' => $tryout->tryout_id])}}" />
                             @empty
                                 <p class="text-center text-gray-500">Belum ada paket tryout untuk kategori ini.</p>
                             @endforelse

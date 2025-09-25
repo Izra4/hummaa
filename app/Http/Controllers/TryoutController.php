@@ -207,4 +207,64 @@ class TryoutController extends Controller
             'userAnswers' => $formattedAnswers,
         ]);
     }
+
+    // Tambahkan metode ini di TryoutController Anda
+
+    public function startLearningMode($tryout_id)
+    {
+        $tryout = Tryout::with(['questions.options', 'questions.questionType'])->findOrFail($tryout_id);
+
+        // 1. KITA TIDAK MENGAMBIL JAWABAN LAMA DARI DATABASE
+
+        $formattedQuestions = $tryout->questions->map(function ($q, $index) {
+            return [
+                'id' => $q->question_id,
+                'number' => $index + 1,
+                'text' => $q->question_text,
+                'type' => $q->questionType->type == 'Pilihan Ganda' ? 'pilihan_ganda' : 'isian',
+                'image' => $q->image_url ? asset($q->image_url) : null,
+                'options' => $q->options->mapWithKeys(function ($opt, $optIndex) {
+                    $key = chr(65 + $optIndex);
+                    return [$key => ['id' => $opt->option_id, 'text' => $opt->option_text]];
+                }),
+                'explanation' => $q->explanation,
+                'correctAnswer' => $q->questionType->type == 'Pilihan Ganda' ? ($q->options->search(fn($opt) => $opt->is_correct) !== false ? chr(65 + $q->options->search(fn($opt) => $opt->is_correct)) : null) : $q->correct_answer_text,
+            ];
+        });
+
+        // 2. BUAT SEBUAH OBJECT ATTEMPT PALSU ATAU SEDERHANA HANYA UNTUK VIEW
+        // Ini agar view Anda tidak error karena $attempt tidak ada.
+        $mockAttempt = (object) [
+            'attempt_id' => 0, // ID 0 atau null, karena ini bukan attempt sungguhan
+        ];
+
+        return view('tryout.tryout-page', [
+            'tryout' => $tryout,
+            'attempt' => $mockAttempt, // Menggunakan attempt palsu
+            'questions' => $formattedQuestions,
+            'userAnswers' => [], // 3. KIRIM ARRAY KOSONG SEBAGAI userAnswers
+        ]);
+    }
+
+    public function showHistory($tryout_id)
+    {
+        // 1. Ambil informasi tryout berdasarkan ID
+        $tryout = Tryout::findOrFail($tryout_id);
+
+        // 2. Ambil pengguna yang sedang login
+        $user = Auth::user();
+
+        // 3. Ambil semua riwayat pengerjaan (attempts) yang relevan dari database
+        $attempts = TryoutAttempt::where('user_id', $user->id)
+            ->where('tryout_id', $tryout->tryout_id)
+            ->where('status', 'submitted') // Hanya tampilkan yang sudah selesai
+            ->orderBy('end_time', 'desc') // Urutkan dari yang terbaru
+            ->get();
+
+        // 4. Kirim data ke view baru
+        return view('tryout.tryout-history', [
+            'tryout' => $tryout,
+            'attempts' => $attempts,
+        ]);
+    }
 }
