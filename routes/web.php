@@ -63,6 +63,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
             Route::get('/review/{tryout_id}', [TryoutController::class, 'review'])->name('review');
 
+            Route::get('/{tryout_id}/learn', [TryoutController::class, 'startLearningMode'])->name('learn');
+
             Route::get('{tryout_id}/history', [TryoutController::class, 'showHistory'])->name('history');
         });
 

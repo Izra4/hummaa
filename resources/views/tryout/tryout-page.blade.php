@@ -34,6 +34,7 @@
                 currentIndex: 0,
                 answers: initialAnswers,
                 isModalOpen: false,
+                feedbackShown: {},
 
                 // COMPUTED PROPERTIES (Getters)
                 get currentQuestion() {

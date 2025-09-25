@@ -45,7 +45,7 @@
                                 <x-bank-soal.bs-question-card judul="{{ $tryout->title }}"
                                     jumlahSoal="{{ $tryout->questions()->count() }}"
                                     tryoutUrl="{{ route('tryout.start', $tryout->tryout_id) }}"
-                                    belajarUrl="{{ route('tryout.review', ['tryout_id' => $tryout->tryout_id, 'mode' => 'belajar']) }}"
+                                    belajarUrl="{{ route('tryout.learn', ['tryout_id' => $tryout->tryout_id, 'mode' => 'belajar']) }}"
                                     historyUrl="{{ route('tryout.history', ['tryout_id' => $tryout->tryout_id])}}" />
                             @empty
                                 <p class="text-center text-gray-500">Belum ada paket tryout untuk kategori ini.</p>

@@ -1,7 +1,7 @@
 @props(['title', 'imageUrl'])
 
 <div class="flex h-full flex-col rounded-lg bg-white p-6 pt-0">
-    <div class="border-gray-200 mb-6 flex items-center gap-4 rounded-xl border p-4">
+    <div class="mb-6 flex items-center gap-4 rounded-xl border border-gray-200 p-4">
 
         <a href="{{ route('bank-soal.index') }}" class="rounded-full p-2 hover:bg-gray-100">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24"
@@ -20,7 +20,7 @@
 
     </div>
 
-    <div class="border-gray-200 rounded-xl border p-4">
+    <div class="rounded-xl border border-gray-200 p-4">
         <div class="mb-4 grid grid-cols-5 gap-3 rounded-xl">
             <template x-for="i in Array.from({ length: 50 }, (_, k) => k + 1)" :key="i">
                 <button @click="changeQuestion(i - 1)"
@@ -36,11 +36,13 @@
             </template>
         </div>
 
-        <div class="mt-auto flex justify-end">
-            <button @click="isModalOpen = true"
-                class="bg-main-blue-button rounded-lg px-8 py-3 font-bold text-white transition-colors duration-200 hover:bg-blue-700">
-                Kumpulkan
-            </button>
-        </div>
+        <template x-if="mode === 'tryout'">
+            <div class="mt-auto flex justify-end">
+                <button @click="isModalOpen = true"
+                    class="bg-main-blue-button rounded-lg px-8 py-3 font-bold text-white transition-colors duration-200 hover:bg-blue-700">
+                    Kumpulkan
+                </button>
+            </div>
+        </template>
     </div>
 </div>
