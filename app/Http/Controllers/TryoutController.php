@@ -208,13 +208,18 @@ class TryoutController extends Controller
         ]);
     }
 
-    // Tambahkan metode ini di TryoutController Anda
-
     public function startLearningMode($tryout_id)
     {
-        $tryout = Tryout::with(['questions.options', 'questions.questionType'])->findOrFail($tryout_id);
+        $user = Auth::user();
+        $tryout = Tryout::findOrFail($tryout_id);
 
-        // 1. KITA TIDAK MENGAMBIL JAWABAN LAMA DARI DATABASE
+        $latestAttempt = TryoutAttempt::where('user_id', $user->id)->where('tryout_id', $tryout_id)->where('status', 'submitted')->latest('updated_at')->first();
+
+        if (!$latestAttempt) {
+            return redirect()->route('bank-soal.index')->with('error', 'Anda harus menyelesaikan mode tryout terlebih dahulu sebelum masuk ke mode belajar.');
+        }
+
+        $tryout = Tryout::with(['questions.options', 'questions.questionType'])->findOrFail($tryout_id);
 
         $formattedQuestions = $tryout->questions->map(function ($q, $index) {
             return [
@@ -232,36 +237,26 @@ class TryoutController extends Controller
             ];
         });
 
-        // 2. BUAT SEBUAH OBJECT ATTEMPT PALSU ATAU SEDERHANA HANYA UNTUK VIEW
-        // Ini agar view Anda tidak error karena $attempt tidak ada.
         $mockAttempt = (object) [
-            'attempt_id' => 0, // ID 0 atau null, karena ini bukan attempt sungguhan
+            'attempt_id' => 0,
         ];
 
         return view('tryout.tryout-page', [
             'tryout' => $tryout,
-            'attempt' => $mockAttempt, // Menggunakan attempt palsu
+            'attempt' => $mockAttempt,
             'questions' => $formattedQuestions,
-            'userAnswers' => [], // 3. KIRIM ARRAY KOSONG SEBAGAI userAnswers
+            'userAnswers' => [],
         ]);
     }
 
     public function showHistory($tryout_id)
     {
-        // 1. Ambil informasi tryout berdasarkan ID
         $tryout = Tryout::findOrFail($tryout_id);
 
-        // 2. Ambil pengguna yang sedang login
         $user = Auth::user();
 
-        // 3. Ambil semua riwayat pengerjaan (attempts) yang relevan dari database
-        $attempts = TryoutAttempt::where('user_id', $user->id)
-            ->where('tryout_id', $tryout->tryout_id)
-            ->where('status', 'submitted') // Hanya tampilkan yang sudah selesai
-            ->orderBy('end_time', 'desc') // Urutkan dari yang terbaru
-            ->get();
+        $attempts = TryoutAttempt::where('user_id', $user->id)->where('tryout_id', $tryout->tryout_id)->where('status', 'submitted')->orderBy('end_time', 'desc')->get();
 
-        // 4. Kirim data ke view baru
         return view('tryout.tryout-history', [
             'tryout' => $tryout,
             'attempts' => $attempts,
